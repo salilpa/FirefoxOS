@@ -1,0 +1,21 @@
+{
+    "version": "1",
+    "name": "Calculator",
+    "launch_path": "/calculator/index.html",
+    "description": "A simple calculator Firefox OS App",
+    "icons": {
+        "16": "/calculator/images/logo16.png",
+        "32": "/calculator/images/logo32.png",
+        "48": "/calculator/images/logo48.png",
+        "64": "/calculator/images/logo64.png",
+        "128": "/calculator/images/logo128.png"
+    },
+    "developer": {
+        "name": "Alejandro Ayuso",
+        "url": "http://xxx.com"
+    },
+    "installs_allowed_from": ["*"],
+    "default_locale": "en",
+    "permissions": {
+    }
+}
