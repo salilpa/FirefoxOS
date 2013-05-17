@@ -12,7 +12,7 @@
     },
     "developer": {
         "name": "Alejandro Ayuso",
-        "url": "http://xxx.com"
+        "url": "http://ubersoldat.github.io/FirefoxOS/"
     },
     "installs_allowed_from": ["*"],
     "default_locale": "en",
