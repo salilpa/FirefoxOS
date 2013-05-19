@@ -1,0 +1,9 @@
+{
+    "name": "OpenWeather",
+    "package_path" : "http://ubersoldat.github.io/FirefoxOS/OpenWeather-0.1.zip",
+    "version": "1",
+    "developer": {
+        "name": "Alejandro Ayuso",
+        "url": "http://robertnyman.com"
+    }
+}
