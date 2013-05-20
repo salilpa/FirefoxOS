@@ -1,21 +1,3 @@
-@font-face {
-    font-family: 'mozTT';
-    src: url('../fonts/moztt_regular-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'mozTT';
-    src: url('../fonts/moztt_light-webfont.woff') format('woff');
-    font-weight: 300;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'mozTT';
-    src: url('../fonts/moztt_medium-webfont.woff') format('woff');
-    font-weight: 500;
-    font-style: normal;
-}
 @media (min-width: 980px) {
 	body {
 	  padding-top: 60px;
