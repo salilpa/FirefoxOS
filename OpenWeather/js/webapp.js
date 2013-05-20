@@ -1,4 +1,31 @@
-OpenWeatherMapRequest = function(options) {
+OpenWeatherMapDailyRequest = function(options) {
+	this.url = options.url ? options.url : 'http://api.openweathermap.org/data/2.5/weather';
+	this.units = options.units ? options.units : 'metric';
+	this.city = options.city ? options.city : null;
+	this.lat = options.lat ? options.lat : null;
+	this.lon = options.lon ? options.lon : null;
+	this.cityId = options.cityId ? options.cityId : null;
+	this.response = null;
+	
+	this.getURL = function(){
+		if (this.citiId != null){
+			return this.url + "?id=" + this.cityId + "&units=" + this.units;
+		}else if (this.city != null){
+			return this.url + "?q=" + this.city + "&units=" + this.units;
+		}else if( this.lat != null && this.lon != null){
+			return this.url + "?lat=" + this.lat + "&lon=" + this.lon + 
+				"&units=" + this.units;
+		}else{
+			throw new Error("Incorrect Request");
+		}
+	};
+	
+	this.call = function(){
+		apiRequest(this);
+	};
+};
+
+OpenWeatherMapForecastRequest = function(options) {
 	this.url = options.url ? options.url : 'http://api.openweathermap.org/data/2.5/forecast/daily';
 	this.units = options.units ? options.units : 'metric';
 	this.days = options.days ? options.days : 5;
@@ -24,28 +51,35 @@ OpenWeatherMapRequest = function(options) {
 	};
 	
 	this.call = function(){
-		var self = this;
-		var xhr = new XMLHttpRequest({mozSystem: true});
-        xhr.open("GET", self.getURL(), true);
-        xhr.onreadystatechange = function () {
-            if (xhr.status === 200 && xhr.readyState === 4) {
-            	console.log("Got response for " + self.getURL());
-                self.response = JSON.parse(xhr.response);
-            }
-        };
-
-        xhr.onerror = function () {
-        	alert("Failed to reach OpenWeatherMap.org API server");
-        };
-        
-        xhr.send();
+		apiRequest(this);
 	};
 };
 
-function renderResponse(request){
+function apiRequest(request){
+	var xhr = new XMLHttpRequest({mozSystem: true});
+    xhr.open("GET", request.getURL(), true);
+    xhr.onreadystatechange = function () {
+        if (xhr.status === 200 && xhr.readyState === 4) {
+        	console.log("Got response for " + request.getURL());
+        	request.response = JSON.parse(xhr.response);
+        }
+    };
+
+    xhr.onerror = function () {
+    	alert("Failed to reach OpenWeatherMap.org API server");
+    };
+    
+    xhr.send();
+}
+
+function renderResponse(request, dailyRequest){
 	$('#accordion').html('');
+	$('#results-container').html('');
 	$('#location-display').val(request.response.city.name);
 	$('#location-display').data('city-id', request.response.city.id);
+	
+	renderDailyResult(dailyRequest);
+	
 	$.each(request.response.list, function(i, el){
 		renderAccordion(i, el, request.units);
 	});
@@ -74,6 +108,25 @@ function renderProgressBar(time){
 	$('#progress').html(html).show();
 }
 
+function renderDailyResult(request){
+	var date = new Date();
+	var day = date.getHours() <= 18 && date.getHours() > 6; // if we had sunset time
+	var unit = request.units === 'metric' ? '°C' : '°F';
+	var weather = request.response.weather[0];
+	var iconCode = weather.icon.substring(0,2);
+	var icon = day ? iconCode + "d.png" : iconCode + "n.png";
+	var html = '<div class="well"><img src="http://openweathermap.org/img/w/';
+	html += icon;
+	html += '" align="left"><div class="temp-container"><span class="temp">';
+	html += request.response.main.temp.toFixed() + unit;
+	html += '</span><span class="min">';
+	html += request.response.main.temp_min.toFixed() + unit;
+	html += '</span><span class="max">';
+	html += request.response.main.temp_max.toFixed() + unit;
+	html += '</span></div></div>';
+	$('#results-container').html(html);
+}
+
 function renderAccordion(index, obj, units){
 	var date = new Date(obj.dt * 1000);
 	var day = date.getHours() <= 18 && date.getHours() > 6; // if we had sunset time
@@ -91,10 +144,12 @@ function renderAccordion(index, obj, units){
 	acc += '<div><div class="date">';
 	acc += date.toUTCString().substring(0,17).trim(); // this will fail for some edge case
 	acc += '</div><div class="weather">';
-	acc += weather.main + ' ' + obj.temp.day.toFixed() + unit;
+	acc += weather.main + ' <span class="temp">' + obj.temp.day.toFixed() + unit + '</span>';
 	acc += '</div></div></a></div><div id="collapse-';
 	acc += index;
 	acc += '" class="accordion-body collapse"><div class="accordion-inner">';
+	acc += '<p>Minimum: <span class="min">' + obj.temp.min.toFixed() + unit + '</span></p>';
+	acc += '<p>Maximum: <span class="max">' + obj.temp.max.toFixed() + unit + '</span></p>';
 	acc += '<p>Pressure: ' + obj.pressure + 'hpa</p>';
 	acc += '<p>Humidity: ' + obj.humidity + '%</p>';
 	acc += '<p>Wind: ' + obj.speed + 'm/s, ' + obj.deg + '°</p>';
@@ -106,6 +161,14 @@ function renderAccordion(index, obj, units){
 function clearSearchOptions(){
 	window.lastCall = null;
 	$('#location-display').removeData('lat').removeData('lon').removeData('city-id');
+}
+
+function addCity(city, code){
+	// Stores the JavaScript object as a string
+	localStorage.setItem("cities", JSON.stringify(cast));
+	 
+	// Parses the saved string into a JavaScript object again 
+	JSON.parse(localStorage.getItem("cities"));
 }
 
 (function() {
@@ -143,36 +206,44 @@ function clearSearchOptions(){
 			}
 		}
 		
-		var request = new OpenWeatherMapRequest({});
+		var dailyRequest = new OpenWeatherMapDailyRequest({});
+		var request = new OpenWeatherMapForecastRequest({});
 		var location = locationDisplay.val();
 		
 		if( $('#imperial-button').hasClass('active') ){
+			dailyRequest.units = 'imperial';
 			request.units = 'imperial';
 		}else{
+			dailyRequest.units = 'metric';
 			request.units = 'metric';
 		}
 		
 		if ( locationDisplay.data('city-id') != undefined ){
+			dailyRequest.cityId = locationDisplay.data('city-id');
 			request.cityId = locationDisplay.data('city-id');
 		}
 		
 		if (locationDisplay.data('lat') == null){
+			dailyRequest.city = location;
 			request.city = location;
 		}else{
+			dailyRequest.lat = locationDisplay.data('lat');
+			dailyRequest.lon = locationDisplay.data('lon');
 			request.lat = locationDisplay.data('lat');
 			request.lon = locationDisplay.data('lon');
 		}
 		
 		console.log("Getting Forecast data from " + request.getURL());
 		
+		dailyRequest.call();
 		request.call();
 		
 		var tries = 0;
 		var intervalID = window.setInterval(function(){
-			if (request.response != null){
-				console.log("Got the response");
+			if (request.response != null && dailyRequest.response != null){
+				console.log("Got the responses");
 				try{
-					renderResponse(request);
+					renderResponse(request, dailyRequest);
 				}catch(err){
 					alert("Woops. Something failed. Try again later.");
 					console.log(err);
@@ -181,9 +252,9 @@ function clearSearchOptions(){
 					window.lastCall = new Date();
 					$('#progress').hide();
 				}
-			}else if ( tries > 20){
-				alert("Failed to reach OpenWeatherMap.org API server after 20 seconds");
+			}else if ( tries === 20){
 				$('#progress').hide();
+				alert("Failed to reach OpenWeatherMap.org API server after 20 seconds");
 				window.clearInterval(intervalID);
 			}else{
 				console.log("Checking for response try " + tries);
