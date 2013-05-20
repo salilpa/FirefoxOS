@@ -7,8 +7,8 @@ if (navigator.mozApps) {
 			install.style.display = "none";
 		} else {
 			var manifestURL = location.href.substring(0, location.href.lastIndexOf("/")) + "/package.manifest";
-			install.parentNode.className = "show-install";
-			install.onclick = function() {
+			var installButton = document.querySelector("#install-btn");
+			installButton.onclick = function() {
 				var installApp = navigator.mozApps.installPackage(manifestURL);
 				installApp.onsuccess = function(data) {
 					install.style.display = "none";
