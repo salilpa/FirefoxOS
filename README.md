@@ -1,13 +1,17 @@
-# FirefoxOS
+# My FirefoxOS Apps
 
-## OSS FirefoxOS Apps
-
-Suite of core/basic open source apps for FirefoxOS
+Suite of core/basic open source apps for FirefoxOS http://ubersoldat.github.io/FirefoxOS/
 
 ### Calculator (v1)
 
-A very simple calculator app
+A hosted calculator app made with Gaia Building Blocks and jQuery.
+
+### OpenWeather
+
+A simple weather app made with jQuery, Twitter's Bootstrap and FontAwesome.
+
+The weather data is provided by http://OpenWeatherMap.org
 
 ## Contribute
 
-You can too contribute.
+You can contribute too.
