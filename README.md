@@ -12,6 +12,10 @@ A simple weather app made with jQuery, Twitter's Bootstrap and FontAwesome.
 
 The weather data is provided by http://OpenWeatherMap.org
 
+### FirefoxOS-Bootstrap
+
+A custom Bootstrap implementation made for FirefoxOS.
+
 ## Contribute
 
 You can contribute too.
