@@ -126,3 +126,12 @@ footer {
 .calculator-button {
 	width: 100%;
 }
+
+#calculator-table {
+	table-layout:fixed;
+}
+
+#display {
+	text-align:right;
+	font-size: 24px;
+}

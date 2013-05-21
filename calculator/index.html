@@ -23,13 +23,29 @@
 		</header>
 	</section>
 
-
 	<div id="main">
 		<table id="calculator-table">
 			<tbody>
 			  <tr>
-          <td colspan="4">
-            <button id="display" class="recommend" style="text-align:right; font-size: 24px;"></button>
+          <td>
+            <button id="delete" class="danger" style="">></button>
+          </td>
+          <td colspan="3">
+            <button id="display" class="recommend"></button>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <button id="shift">&uarr;</button>
+          </td>
+          <td>
+            <button id="sqrt">&radic;</button>
+          </td>
+          <td>
+            <button id="plus-minus">&plusmn;</button>
+          </td>
+          <td>
+            <button class="calculator-button" value="/" id="divide">&divide;</button>
           </td>
         </tr>
 				<tr>
@@ -42,9 +58,9 @@
 					<td>
 						<button class="calculator-button" value="9" id="number-9">9</button>
 					</td>
-					<td>
-						<button class="calculator-button" value="/" id="divide">÷</button>
-					</td>
+          <td>
+            <button class="calculator-button" value="*" id="multiply">x</button>
+          </td>
 				</tr>
 				<tr>
 					<td>
@@ -56,9 +72,9 @@
 					<td>
 						<button class="calculator-button" value="6" id="number-6">6</button>
 					</td>
-					<td>
-						<button class="calculator-button" value="*" id="multiply">x</button>
-					</td>
+          <td>
+            <button class="calculator-button" value="-" id="minus">-</button>
+          </td>
 				</tr>
 				<tr>
 				  <td>
@@ -70,9 +86,10 @@
 					<td>
 						<button class="calculator-button" value="3" id="number-3">3</button>
 					</td>
-					<td>
-						<button class="calculator-button" value="-" id="minus">-</button>
-					</td>
+					
+          <td>
+            <button class="calculator-button" value="+" id="plus">+</button>
+          </td>
 				</tr>
 				<tr>
 					<td>
@@ -81,11 +98,8 @@
 					<td>
 						<button class="calculator-button" value="." id="point">.</button>
 					</td>
-					<td>
+					<td colspan="2">
 						<button class="calculator-button" value="=" id="resolve">=</button>
-					</td>
-					<td>
-						<button class="calculator-button" value="+" id="plus">+</button>
 					</td>
 				</tr>
 			</tbody>
