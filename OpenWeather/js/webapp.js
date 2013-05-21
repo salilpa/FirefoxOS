@@ -115,7 +115,7 @@ function renderDailyResult(request){
 	var weather = request.response.weather[0];
 	var iconCode = weather.icon.substring(0,2);
 	var icon = day ? iconCode + "d.png" : iconCode + "n.png";
-	var html = '<div class="well"><img src="http://openweathermap.org/img/w/';
+	var html = '<div class="well well-ffos"><img src="http://openweathermap.org/img/w/';
 	html += icon;
 	html += '" align="left"><div class="temp-container"><span class="temp">';
 	html += request.response.main.temp.toFixed() + unit;
@@ -134,7 +134,7 @@ function renderAccordion(index, obj, units){
 	var weather = obj.weather[0];
 	var iconCode = weather.icon.substring(0,2);
 	var icon = day ? iconCode + "d.png" : iconCode + "n.png";
-	var acc = '<div class="accordion-group"><div class="accordion-heading">';
+	var acc = '<div class="accordion-group-ffos"><div class="accordion-heading">';
 	acc += '<a class="accordion-toggle" data-toggle="collapse" ';
 	acc += 'data-parent="#accordion" href="#collapse-';
 	acc += index;
@@ -163,13 +163,73 @@ function clearSearchOptions(){
 	$('#location-display').removeData('lat').removeData('lon').removeData('city-id');
 }
 
-function addCity(city, code){
-	// Stores the JavaScript object as a string
-	localStorage.setItem("cities", JSON.stringify(cast));
-	 
-	// Parses the saved string into a JavaScript object again 
-	JSON.parse(localStorage.getItem("cities"));
-}
+var debugDailyResponse = {
+	name: 'debug',
+	dt: 1369147271,
+	id: 2643743,
+	cod: 200,
+	main: {
+		temp: 286.48,
+		pressure: 1017,
+		temp_min: 284.82,
+		temp_max: 288.15,
+		humidity: 74
+	},
+    weather: [
+        {
+        	id: 802,
+        	main: "Clouds",
+        	description: "scattered clouds",
+        	icon: "03d"
+        }
+    ]
+};
+
+var debugForecastResponse = {
+	city: {
+		id: 524901,
+		name: "debug",
+	},
+	list: [
+		{
+			dt: 1369126800,
+			temp: {
+				day: 17.17,
+				min: 13.39,
+				max: 17.17,
+			},
+			pressure: 1005.18,
+			humidity: 66,
+			weather: [
+				{
+					id: 803,
+					main: "Clouds",
+					icon: "04d"
+				}
+			],
+			speed: 3.22,
+			deg: 112,
+		},{
+			dt: 1369213200,
+			temp: {
+				day: 17.17,
+				min: 13.39,
+				max: 17.17,
+			},
+			pressure: 1005.18,
+			humidity: 66,
+			weather: [
+				{
+					id: 803,
+					main: "Clouds",
+					icon: "04d"
+				}
+			],
+			speed: 3.22,
+			deg: 112,
+		},
+    ]
+};
 
 (function() {
 	// set a global var with the last request date
@@ -177,15 +237,23 @@ function addCity(city, code){
 	window.lastCall = null; 
 	
 	var locationDisplay = $('#location-display');
+	
+	$(locationDisplay).click(function(){
+		$(this).val('');
+	});
+	
 	$('#location-button').click(function(){
+		$('#location-button').prop('disabled', true);
 		navigator.geolocation.getCurrentPosition(function (position) {
 			clearSearchOptions();
 			var location = position.coords.latitude + ", " + position.coords.longitude;
 			locationDisplay.val(location);
 			locationDisplay.data('lat', position.coords.latitude);
 			locationDisplay.data('lon', position.coords.longitude);
+			$('#location-button').prop('disabled', false);
 		},function (position) {
 			alert("Failed to get your current location.");
+			$('#location-button').prop('disabled', false);
         });
 	});
 	
@@ -209,6 +277,13 @@ function addCity(city, code){
 		var dailyRequest = new OpenWeatherMapDailyRequest({});
 		var request = new OpenWeatherMapForecastRequest({});
 		var location = locationDisplay.val();
+		
+		if ( location === 'debug' ){
+			dailyRequest.response = debugDailyResponse;
+			request.response = debugForecastResponse;
+			renderResponse(request, dailyRequest);
+			return false;
+		}
 		
 		if( $('#imperial-button').hasClass('active') ){
 			dailyRequest.units = 'imperial';
