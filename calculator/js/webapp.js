@@ -22,18 +22,10 @@
 		});
 	});
 	
-	$('#shift').click(function(){
-		if ( $(this).hasClass('active') ){
-			$(this).removeClass('active').html('&uarr;');
-		}else{
-			$(this).addClass('active').html('&darr;');
-		}
-		
-		$('.calculator-button').toggle();
-		$('.operator-button').toggle();
-	});
+	$('#shift').click(shiftButtonHandler);
 	
 	$('.operator-button').click(function(e){
+		shiftButtonHandler();
 		var expr = display.html();
 		var result = resolve(expr);
 		result = applyOperator(expr, result, e.target.id);
@@ -61,6 +53,17 @@ function setDisplay(value){
 	}else{
 		display.html(value.toString().substring(0,14));
 	}
+}
+
+function shiftButtonHandler(e){
+	if ( $('#shift').hasClass('active') ){
+		$('#shift').removeClass('active').html('&uarr;');
+	}else{
+		$('#shift').addClass('active').html('&darr;');
+	}
+	
+	$('.calculator-button').toggle();
+	$('.operator-button').toggle();
 }
 
 function applyOperator(expr, value, operator){
