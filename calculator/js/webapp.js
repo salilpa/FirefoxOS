@@ -1,4 +1,10 @@
 (function() {
+	
+	Calc = {
+		MAX_DIGITS: 14,
+		MAX_POW: Math.pow(10, 14)
+	};
+	
 	var display = $('#display');
 	
 	display.click(function(){
@@ -51,7 +57,7 @@ function setDisplay(value){
 	if ( isNaN(value) ){
 		display.html('ERR');
 	}else{
-		display.html(value.toString().substring(0,14));
+		display.html(value.toFixed(Calc.MAX_DIGITS));
 	}
 }
 
@@ -77,20 +83,30 @@ function applyOperator(expr, value, operator){
 	}else if ( operator === 'x3'){
 		result = Math.pow(value,3);
 	}else if ( operator === 'cos'){
-		result = Math.cos(value);
+		result = Math.cos(value * Math.PI/180);
+		if (result > 360 || result < 0) return NaN;
 	}else if ( operator === 'sin'){
-		result = Math.sin(value);
+		result = Math.sin(value * Math.PI/180);
+		if (result > 360 || result < 0) return NaN;
 	}else if ( operator === 'tan'){
-		result = Math.tan(value);
+		result = Math.tan(value * Math.PI/180);
+		if (result > 360 || result < 0) return NaN;
 	}else if ( operator === 'acos'){
-		result = Math.acos(value);
+		result = Math.acos(value * Math.PI/180);
+		if (result > 360 || result < 0) return NaN;
 	}else if ( operator === 'asin'){
-		result = Math.asin(value);
+		result = Math.asin(value * Math.PI/180);
+		if (result > 360 || result < 0) return NaN;
 	}else if ( operator === 'atan'){
-		result = Math.atan(value);
+		result = Math.atan(value * Math.PI/180);
+		if (result > 360 || result < 0) return NaN;
 	}else if ( operator === 'exp'){
 		result = Math.exp(value);
 	}else if ( operator === 'log'){
+		result = Math.log(value)/Math.LN10;
+	}else if ( operator === 'log2'){
+		result = Math.log(value)/Math.LN2;
+	}else if ( operator === 'ln'){
 		result = Math.log(value);
 	}else if ( operator === 'plus-minus'){
 		result = value * -1;
@@ -101,6 +117,7 @@ function applyOperator(expr, value, operator){
 	}else if ( operator === 'pow'){
 		result = powerOfExpression(expr);
 	}
+	
 	return result;
 }
 
