@@ -36,59 +36,73 @@
         </tr>
         <tr>
           <td>
-            <button id="shift">&uarr;</button>
+            <button class="green" id="shift">&uarr;</button>
           </td>
           <td>
-            <button id="sqrt">&radic;</button>
+            <button class="calculator-button" value="(">(</button>
+            <button class="operator-button green hidden" id="plus-minus">&plusmn;</button>
           </td>
           <td>
-            <button id="plus-minus">&plusmn;</button>
+            <button class="calculator-button" value=")">)</button>
+            <button class="operator-button green hidden" id="percent">%</button>
           </td>
           <td>
-            <button class="calculator-button" value="/" id="divide">&divide;</button>
+            <button class="calculator-button" value="^" id="power">^</button>
+            <button class="operator-button green one-click hidden" id="sqrt">&radic;</button>
           </td>
         </tr>
 				<tr>
 					<td>
 						<button class="calculator-button" value="7" id="number-7">7</button>
+            <button class="operator-button green hidden" id="cos">cos</button>
 					</td>
 					<td>
 						<button class="calculator-button" value="8" id="number-8">8</button>
+            <button class="operator-button green hidden" id="sin">sin</button>
 					</td>
 					<td>
 						<button class="calculator-button" value="9" id="number-9">9</button>
+            <button class="operator-button green hidden" id="tan">tan</button>
 					</td>
           <td>
             <button class="calculator-button" value="*" id="multiply">x</button>
+            <button class="operator-button green hidden" id="exp">&#8494;</button>
           </td>
 				</tr>
 				<tr>
 					<td>
 						<button class="calculator-button" value="4" id="number-4">4</button>
+            <button class="operator-button green hidden" id="acos">acos</button>
 					</td>
 					<td>
 						<button class="calculator-button" value="5" id="number-5">5</button>
+            <button class="operator-button green hidden" id="asin">asin</button>
 					</td>
 					<td>
 						<button class="calculator-button" value="6" id="number-6">6</button>
+            <button class="operator-button green hidden" id="atan">atan</button>
 					</td>
           <td>
             <button class="calculator-button" value="-" id="minus">-</button>
+            <button class="operator-button green hidden" id="log">log</button>
           </td>
 				</tr>
 				<tr>
 				  <td>
             <button class="calculator-button" value="1" id="number-1">1</button>
+            <button class="operator-button green hidden" id="x2">x&sup2;</button>
           </td>
           <td>
             <button class="calculator-button" value="2" id="number-2">2</button>
+            <button class="operator-button green hidden" id="x3">x&sup3;</button>
           </td>
 					<td>
 						<button class="calculator-button" value="3" id="number-3">3</button>
+            <button class="operator-button green hidden" id="pow">x&#8319;</button>
 					</td>
-					
           <td>
-            <button class="calculator-button" value="+" id="plus">+</button>
+            <button class="calculator-button" value="/" id="divide">&divide;</button>
+            <button class="operator-button green hidden" id="factorial">!</button>
           </td>
 				</tr>
 				<tr>
@@ -98,9 +112,12 @@
 					<td>
 						<button class="calculator-button" value="." id="point">.</button>
 					</td>
-					<td colspan="2">
+					<td>
 						<button class="calculator-button" value="=" id="resolve">=</button>
 					</td>
+          <td>
+            <button class="calculator-button" value="+" id="plus">+</button>
+          </td>
 				</tr>
 			</tbody>
 		</table>
