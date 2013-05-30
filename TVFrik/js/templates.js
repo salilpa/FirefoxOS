@@ -166,6 +166,15 @@ TVFrik.Templates.renderEpisode = function(show, episode){
 		)
 	);
 	$(template.target).trigger('pagecreate');
+	
+	$('#watched-checkbox, #downloaded-checkbox').click(function(e){
+		$(this).attr("checked", !$(this).attr("checked"));
+		var event = TVFrik.Events.changeEpisodeStateEvent;
+		event.showId = parseInt($(this).data('show'));
+		event.episodeId = parseInt($(this).data('episode'));
+		event.status = $(this).data('status');
+		$.event.trigger(event);
+	});
 };
 
 TVFrik.Templates.renderStats = function(){

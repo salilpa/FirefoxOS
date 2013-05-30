@@ -70,6 +70,19 @@ TVFrik.Controller.Show = {
 	},
 	renderSearchEventHandler: function(){
 		TVFrik.Templates.renderSearch();
+	},
+	changeStatusEventHandler: function(showId, episodeId, status){
+		TVFrik.DB.get('show', showId, function(event){
+			var show = event.target.result;
+			for ( var i = 0; i < show.episodes.length; i++) {
+				var episode = show.episodes[i];
+				if( episode.apiId === episodeId ){
+					episode[status] = !episode[status];
+					break;
+				}
+			}
+			TVFrik.DB.save('show', show);
+		});
 	}
 };
 

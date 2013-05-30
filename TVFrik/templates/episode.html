@@ -10,10 +10,18 @@
     <p class="stars">{{{stars episode.rating}}}</p>
     <form>
       <fieldset data-role="controlgroup" data-type="horizontal">
-          <input type="checkbox" name="checkbox-h-2a" id="checkbox-h-2a">
-          <label for="checkbox-h-2a">Downloaded</label>
-          <input type="checkbox" name="checkbox-h-2b" id="checkbox-h-2b">
-          <label for="checkbox-h-2b">Watched</label>
+        {{#if episode.downloaded}}
+          <input type="checkbox" id="downloaded-checkbox" data-status="downloaded" data-show="{{show.apiId}}" data-episode="{{episode.apiId}}" checked>
+        {{else}}
+          <input type="checkbox" id="downloaded-checkbox" data-status="downloaded" data-show="{{show.apiId}}" data-episode="{{episode.apiId}}">
+        {{/if}}
+          <label for="downloaded-checkbox">Downloaded</label>
+        {{#if episode.watched}}
+          <input type="checkbox" id="watched-checkbox" data-status="watched" data-show="{{show.apiId}}" data-episode="{{episode.apiId}}" checked>
+        {{else}}
+          <input type="checkbox" id="watched-checkbox" data-status="watched" data-show="{{show.apiId}}" data-episode="{{episode.apiId}}">        
+        {{/if}}
+          <label for="watched-checkbox">Watched</label>
       </fieldset>
     </form>
   </div>

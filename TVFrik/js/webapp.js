@@ -100,6 +100,15 @@
 		TVFrik.Templates.renderTools();
 	});
 	
+	$(document).on('changeEpisodeStateEvent', function(changeEpisodeStateEvent){
+		console.log(changeEpisodeStateEvent.message);
+		TVFrik.Controller.Show.changeStatusEventHandler(
+			changeEpisodeStateEvent.showId,
+			changeEpisodeStateEvent.episodeId,
+			changeEpisodeStateEvent.status
+		);
+	});
+	
 })();
 
 function updateProgressBar(step){

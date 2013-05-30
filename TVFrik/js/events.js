@@ -60,4 +60,12 @@ TVFrik.Events = {
 		message: "Rendering Tools Page",
 		time: new Date(),
 	},
+	changeEpisodeStateEvent: {
+		type: "changeEpisodeStateEvent",
+		message: "Changing episode state",
+		time: new Date(),
+		showId: null,
+		episodeId: null,
+		status: null
+	}
 };
