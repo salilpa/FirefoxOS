@@ -71,7 +71,7 @@ TVFrik.DB = {
 			
 			for ( var i in entities ){
 				var ent = entities[i];
-				var request = objectStore.add(ent);
+				var request = objectStore.put(ent);
 				
 				request.onsuccess = function(e){
 					console.log("saved entity");
