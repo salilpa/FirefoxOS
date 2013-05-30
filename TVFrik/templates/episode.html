@@ -1,0 +1,28 @@
+{{{ header "TVFrik!" hasBackButton="true" }}}
+<div data-role="content" data-theme="a">
+  
+  <div id="episode-header">
+    <p id="episode-name">{{episode.name}}</p>
+    <p id="episode-number">Season {{episode.season}} Episode {{episode.number}}</p>
+  </div>
+  
+  <div id="episode-status">
+    <p class="stars">{{{stars episode.rating}}}</p>
+    <form>
+      <fieldset data-role="controlgroup" data-type="horizontal">
+          <input type="checkbox" name="checkbox-h-2a" id="checkbox-h-2a">
+          <label for="checkbox-h-2a">Downloaded</label>
+          <input type="checkbox" name="checkbox-h-2b" id="checkbox-h-2b">
+          <label for="checkbox-h-2b">Watched</label>
+      </fieldset>
+    </form>
+  </div>
+  <div id="episode-poster">
+    <img src="http://thetvdb.com/banners/_cache/{{episode.poster}}" width="250">
+  </div>
+  <div id="episode-overview">
+    {{episode.overview}}
+  </div>
+  
+</div>
+{{{ footer '#shows'}}}

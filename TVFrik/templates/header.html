@@ -1,0 +1,22 @@
+{{#if isEdit }}
+  <div data-role="header">
+    <a href="#" data-icon="delete">Cancel</a>
+    <h1>{{title}}</h1>
+    <a href="#" data-icon="check">Save</a>
+  </div>
+{{/if}}
+
+{{#if hasBackButton }}
+  <div data-role="header" data-theme="a">
+    <h1>{{title}}</h1>
+    <div class="back-button">
+      <a href="#" data-rel="back" data-role="button" data-corners="false" data-shadow="false" data-iconshadow="false">
+        <i class="ui-icon-icon-chevron-left"></i>
+      </a>
+    </div>
+  </div>
+{{else}}
+  <div data-role="header" data-theme="a">
+    <h1>{{title}}</h1>
+  </div>
+{{/if}}
