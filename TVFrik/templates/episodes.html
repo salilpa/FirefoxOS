@@ -7,7 +7,7 @@
   {{#each episodes}}
     <li data-icon="icon-chevron-right">
       <a href="#episode" class="episode-button" data-show="{{this.show}}" data-season="{{season}}" data-episode="{{this.apiId}}" data-transition="slide">
-        {{this.name}} {{!episodeStatus this}}
+        {{this.name}} {{{episodeStatus this}}}
       </a>
     </li>
   {{/each}}

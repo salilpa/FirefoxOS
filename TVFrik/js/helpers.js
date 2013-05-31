@@ -52,7 +52,7 @@ TVFrik.Helper.stars = function(rating){
 	return new Handlebars.SafeString(res);
 };
 
-TVFrik.Helper.episodeStatus = function(status){
+TVFrik.Helper.episodeStatus = function(episode){
 	var res = "";
 	
 	if (episode.watched){
@@ -63,7 +63,7 @@ TVFrik.Helper.episodeStatus = function(status){
 		res = '<span class="episode-status unwatched"><i class="ui-icon-icon-eye-close"></i></span>';
 	}
 	
-	return res;
+	return new Handlebars.SafeString(res);
 };
 
 TVFrik.Helper.header = function(title, options){
