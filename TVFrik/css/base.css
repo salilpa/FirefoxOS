@@ -214,6 +214,10 @@ html,body {
   font-family: mozTT, "Helvetica Neue", Helvetica, Arial, sans-serif;
   text-align: center;
 }
+
+.ui-btn-up-a, .ui-btn-up-b, .ui-btn-up-c, .ui-btn-up-d {
+	font-weight: normal;
+}
 /**
 .ui-icon-searchfield:before {
   font-family: FontAwesome;
