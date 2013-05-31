@@ -17,14 +17,16 @@ FiREST.Events = {
 		message: "Rendering History Page",
 		time: new Date(),
 		handler: function(e){
-			FiREST.Templates.renderHistoryPage();
+			FiREST.DB.getAll('history', function(event){
+				console.log(event);
+				FiREST.Templates.renderHistoryPage(event.target.result.value);
+			});
 		}
 	},
 	responseReceivedEvent: {
 		type: "responseReceivedEvent",
 		message: "Response received",
 		time: new Date(),
-		url: null,
 		handler: function(e){
 			console.log(e);
 		}
@@ -66,24 +68,41 @@ FiREST.Events = {
 			var method = $('#select-http-method').val();
 			var url = $('#request-url').val();
 			
+			var history = {
+				uuid: FiREST.UUID(),
+				datetime: new Date(),
+				method: method,
+				url: url,
+				headers: {},
+				response: null
+			};
+			
 			var xhr = new XMLHttpRequest({mozSystem: true});
 			xhr.open(method, url, true);
 			
 			$('.request-header').each(function(){
 				var header = $(this).html().trim().split(':');
 				xhr.setRequestHeader(header[0], header[1]);
+				history.headers[header[0]] = header[1];
 			});
 			
             xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4) {
-                	FiREST.Templates.renderResponsePage({
-                		response:{
-                			status: xhr.status,
-                			headers: xhr.getHeaders(),
-                			body: xhr.response
-                		}
-            		});
+            	var result = {
+        			response:{
+            			status: xhr.status,
+            			headers: xhr.getHeaders(),
+            			body: xhr.response
+        			}
+            	};
+            	history.response = result.response;
+            	
+                if (xhr.readyState === 4 && xhr.status !== 0) {
+                	$.mobile.navigate(FiREST.Templates.templates.response.target);
+                	FiREST.Templates.renderResponsePage(result);
                 }
+                
+                FiREST.DB.save('history', history);
+                
             };
 
             xhr.onerror = function () {
