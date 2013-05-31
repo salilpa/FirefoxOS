@@ -1,0 +1,21 @@
+<div data-role="footer" data-id="main-footer" data-position="fixed">
+  <div data-role="navbar">
+    <ul>
+    {{#each buttons}}
+      {{#if this.active }}
+        <li>
+          <a href="{{this.url}}" data-icon="{{this.icon}}" data-iconpos="top" class="ui-btn-active ui-state-persist">
+            {{this.title}}
+          </a>
+        </li>
+      {{else}}
+        <li>
+          <a href="{{this.url}}" data-icon="{{this.icon}}" data-iconpos="top">
+            {{this.title}}
+          </a>
+        </li>
+      {{/if}}
+    {{/each}}
+    </ul>
+  </div>
+</div>

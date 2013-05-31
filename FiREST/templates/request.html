@@ -1,0 +1,36 @@
+{{{ header "FiREST" }}}
+
+<div data-role="content">
+  <select id="select-http-method">
+    <option value="GET">GET</option>
+    <option value="POST">POST</option>
+    <option value="PUT">PUT</option>
+    <option value="DELETE">DELETE</option>
+    <option value="HEAD">HEAD</option>
+    <option value="OPTIONS">OPTIONS</option>
+    <option value="TRACE">TRACE</option>
+  </select>
+  
+  <input type="url" id="request-url" placeholder="URL" value="http://">
+  
+  <ul id="headers-list" data-role="listview" data-inset="true" data-divider-theme="a" data-corners="true">
+    <li data-role="list-divider">HTTP Headers</li>
+    <li id="klsjdruhklzfkasjhdf">
+      <a href="#" class="request-header" data-li-id="klsjdruhklzfkasjhdf">Accept: application/json</a>
+    </li>
+    <li id="lkasjdflkjasddlfkjas">
+      <a href="#" class="request-header" data-li-id="lkasjdflkjasddlfkjas">Accept: application/xml</a>
+    </li>
+  </ul>
+  
+  <button id="add-header-button" data-role="button">Add Header</button>
+  
+  <!--
+    <input type="checkbox" name="checkbox-1a" id="checkbox-1a" checked="">
+    <label for="checkbox-1a">Create Session</label>
+  -->
+  
+  <a href="#response" id="send-button" data-role="button" data-theme="b">SEND</a>
+</div>
+
+{{{ footer '#request'}}}

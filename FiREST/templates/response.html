@@ -1,0 +1,16 @@
+{{{ header "FiREST" hasBackButton="true" }}}
+
+<div data-role="content">
+  <div class="response-metadata">
+    <ul data-role="listview">
+      <li data-role="list-divider">Status</li>
+      <li>{{response.status}}</li>
+      <li data-role="list-divider">Headers</li>
+      {{{ headers response.headers }}}
+      <li data-role="list-divider">Response</li>
+    </ul>
+  </div>
+  <div class="response-body">
+    {{response.body}}
+  </div>
+</div>

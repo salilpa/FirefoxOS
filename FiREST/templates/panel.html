@@ -1,0 +1,22 @@
+<div data-role="panel" id="main-panel" data-position="left" data-display="reveal" data-theme="c">
+  <ul data-role="listview" data-theme="a" data-divider-theme="b" data-icon="false">
+    <li data-role="list-divider">FiREST</li>
+
+    {{#each buttons}}
+      {{#if this.active }}}
+        <li data-theme="b">
+          <a href="#{{this.link}}" id="{{this.id}}" class="panel-button">
+            {{this.title}}
+          </a>
+        </li>
+      {{else}}
+        <li>
+          <a href="#{{this.link}}" id="{{this.id}}" class="panel-button">
+            {{this.title}}
+          </a>
+        </li>
+      {{/if}}
+    {{/each}}
+    
+  </ul>
+</div>
