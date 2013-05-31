@@ -75,16 +75,16 @@ TVFrik.Templates.ajaxTemplate = function(tmpl_url){
 TVFrik.Templates.renderPage = function(page){
 	switch(page){
 		case '#shows':
-			$.event.trigger('renderShowsEvent');
+			$.event.trigger(TVFrik.Events.renderShowsEvent);
 			break;
 		case '#search':
-			$.event.trigger('renderSearchEvent');
+			$.event.trigger(TVFrik.Events.renderSearchEvent);
 			break;
 		case '#stats':
-			$.event.trigger('renderStatsEvent');
+			$.event.trigger(TVFrik.Events.renderStatsEvent);
 			break;
 		case '#tools':
-			$.event.trigger('renderToolsEvent');
+			$.event.trigger(TVFrik.Events.renderToolsEvent);
 			break;
 	}
 };

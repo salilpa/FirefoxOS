@@ -51,63 +51,7 @@
 		});
 	}
 	
-	$(document).on(TVFrik.Events.savedShowEvent.type, function(e){
-		if (e.success){
-			alert('Added "' + e.entity.name + '" to your shows');
-		}else{
-			alert('Failed to add show "' + e.entity.name + '"');
-		}
-	});
-	
-	$(document).on('renderShowsEvent', function(renderShowsEvent){
-		console.log(renderShowsEvent.message);
-		TVFrik.Controller.Show.renderShowsEventHandler();
-	});
-	
-	$(document).on('renderSearchEvent', function(renderSearchEvent){
-		console.log(renderSearchEvent.message);
-		TVFrik.Controller.Show.renderSearchEventHandler();
-	});
-	
-	$(document).on('renderSeasonsEvent', function(renderSeasonsEvent){
-		console.log(renderSeasonsEvent.message);
-		TVFrik.Controller.Show.renderSeasonsEventHandler(renderSeasonsEvent.showId);
-	});
-	
-	$(document).on('renderSeasonEvent', function(renderSeasonEvent){
-		console.log(renderSeasonEvent.message);
-		TVFrik.Controller.Show.renderSeasonEventHandler(
-			renderSeasonEvent.showId,
-			renderSeasonEvent.season
-		);
-	});
-	
-	$(document).on('renderEpisodeEvent', function(renderEpisodeEvent){
-		console.log(renderEpisodeEvent.message);
-		TVFrik.Controller.Show.renderEpisodeEventHandler(
-			renderEpisodeEvent.showId,
-			renderEpisodeEvent.episodeId
-		);
-	});
-	
-	$(document).on('renderStatsEvent', function(renderStatsEvent){
-		console.log(renderStatsEvent.message);
-		TVFrik.Templates.renderStats();
-	});
-	
-	$(document).on('renderToolsEvent', function(renderToolsEvent){
-		console.log(renderToolsEvent.message);
-		TVFrik.Templates.renderTools();
-	});
-	
-	$(document).on('changeEpisodeStateEvent', function(changeEpisodeStateEvent){
-		console.log(changeEpisodeStateEvent.message);
-		TVFrik.Controller.Show.changeStatusEventHandler(
-			changeEpisodeStateEvent.showId,
-			changeEpisodeStateEvent.episodeId,
-			changeEpisodeStateEvent.status
-		);
-	});
+	TVFrik.registerEvents();
 	
 })();
 
