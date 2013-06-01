@@ -1,0 +1,21 @@
+{{{ header "FiREST" hasBackButton="true" }}}
+
+<div data-role="content">
+  <div class="response-metadata">
+    <ul data-role="listview">
+      <li data-role="list-divider">Request</li>
+      <li>Method: {{method}}</li>
+      <li>URL: {{url}}</li>
+      <li>Date: {{datetime}}</li>
+      <li data-role="list-divider">Request Headers</li>
+      {{{ headers headers }}}
+      <li data-role="list-divider">Response {{ response.status }}</li>
+      <li data-role="list-divider">Response Headers</li>
+      {{{ headers response.headers }}}
+      <li data-role="list-divider">Response Body</li>
+    </ul>
+  </div>
+  <div class="response-body">
+    {{response.body}}
+  </div>
+</div>

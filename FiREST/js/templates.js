@@ -16,6 +16,11 @@ FiREST.Templates.templates = {
     	target: '#response',
     	data: {}
     },
+    entry: {
+    	template: 'entry',
+    	target: '#entry',
+    	data: {}
+    },
 };
 
 FiREST.Templates.renderTemplate = function(tmpl_name, tmpl_data) {
@@ -80,14 +85,17 @@ FiREST.Templates.renderRequestPage = function(){
 	});
 };
 
-FiREST.Templates.renderHistoryPage = function(){
+FiREST.Templates.renderHistoryPage = function(history){
 	var template = this.templates.history;
 	$(template.target).html(
 		this.renderTemplate(
-			template.template, {}
+			template.template, {history:history}
 		)
 	);
 	$(template.target).trigger('pagecreate');
+	
+	$('.show-history-button').click(FiREST.Events.showHistoryEvent);
+	$('.delete-history-button').click(FiREST.Events.deleteHistoryEvent);
 };
 
 FiREST.Templates.renderResponsePage = function(response){
@@ -98,4 +106,15 @@ FiREST.Templates.renderResponsePage = function(response){
 		)
 	);
 	$(template.target).trigger('pagecreate');
+};
+
+FiREST.Templates.renderHistoryEntryPage = function(entry){
+	var template = this.templates.entry;
+	$(template.target).html(
+		this.renderTemplate(
+			template.template, entry
+		)
+	);
+	$(template.target).trigger('pagecreate');
+	
 };

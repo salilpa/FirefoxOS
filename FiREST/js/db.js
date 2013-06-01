@@ -100,19 +100,19 @@ FiREST.DB = {
 			FiREST.DB.load();
 		}
 	},
-	del: function(store, entity){
+	remove: function(store, key){
 		if (FiREST.DB.db != null) {
-			var tx = FiREST.DB.getTransaction(store, false);
+			var tx = FiREST.DB.getTransaction(store, true);
 			var objectStore = tx.objectStore(store);
 			
 			// entity can be an array or not, so we treat all as array
-			var entities = new Array().concat(entity);
+			var keys = new Array().concat(key);
 			
-			for ( var i in entities ){
-				var request = objectStore.delete(entities[i]);
+			for ( var i in keys ){
+				var request = objectStore.delete(keys[i]);
 				
 				request.onsuccess = function(e){
-					console.log("deleted entity");
+					console.log("deleted entity " + keys[i]);
 				};
 				
 				request.onerror = function(e){

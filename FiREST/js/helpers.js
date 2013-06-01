@@ -71,3 +71,15 @@ FiREST.Helper.HTTPheaders = function(headers){
 	
 	return new Handlebars.SafeString(res);
 };
+
+FiREST.Helper.historyStatus = function(history){
+	var res = "";
+	if (history.response.status === 0){
+		res = '<i class="ui-icon-icon-flag" style="color: red;"></i>';
+	}else if (history.response.status === 200){
+		res = '<i class="ui-icon-icon-ok-sign"></i>';
+	}else{
+		res = '<i class="ui-icon-icon-info-sign"></i>';
+	}
+	return new Handlebars.SafeString(res);
+}

@@ -4,12 +4,11 @@
 	Handlebars.registerHelper('header', FiREST.Helper.header);
 	Handlebars.registerHelper('footer', FiREST.Helper.footer);
 	Handlebars.registerHelper('headers', FiREST.Helper.HTTPheaders);
+	Handlebars.registerHelper('historyStatus', FiREST.Helper.historyStatus);
 	
 	console.log("Helpers registered");
 	
 	$(document).on('pagechange', function(event, obj){
-		console.log(event);
-		console.log(obj);
 		var page = $.mobile.path.parseUrl(obj.absUrl).hash;
 		if(page){
 			FiREST.Templates.renderPage(page);
@@ -33,7 +32,6 @@
 		}, 1000);
 		
 		$(document).on(FiREST.Events.databaseLoadedEvent.type, function(e){
-			console.log(e.message);
 			updateProgressBar(5);
 			window.clearInterval(intervalId);
 			$.mobile.navigate(FiREST.Templates.templates.request.target);

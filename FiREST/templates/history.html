@@ -1,6 +1,18 @@
 {{{ header "FiREST" }}}
 
 <div data-role="content">
+  <ul id="history-list" data-role="listview" data-inset="false" data-split-icon="icon-remove" data-split-theme="a">
+    {{#each history}}
+      <li id="{{this.uuid}}">
+        <a href="#" class="show-history-button" data-history-id="{{this.uuid}}">
+          <h2>{{this.method}} {{this.url}}</h2>
+          <p>{{this.datetime}}</p>
+          <p class="ui-li-aside">{{{ historyStatus this }}}</p>
+        </a>
+        <a href="#" class="delete-history-button" data-history-id="{{this.uuid}}">Delete</a>
+      </li>
+    {{/each}}
+  </ul>
 </div>
 
 {{{ footer '#history'}}}

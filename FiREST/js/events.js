@@ -17,9 +17,15 @@ FiREST.Events = {
 		message: "Rendering History Page",
 		time: new Date(),
 		handler: function(e){
+			var history = [];
 			FiREST.DB.getAll('history', function(event){
-				console.log(event);
-				FiREST.Templates.renderHistoryPage(event.target.result.value);
+				var cursor = event.target.result;
+				if (cursor) {
+					history.push(cursor.value);
+					cursor.continue();
+				}else{
+					FiREST.Templates.renderHistoryPage(history);
+				}
 			});
 		}
 	},
@@ -110,7 +116,35 @@ FiREST.Events = {
             };
             xhr.send();
 		}
-	},
+	}, 
+	deleteHistoryEvent: {
+		type: "deleteHistoryEvent",
+		message: "Deleting History",
+		time: new Date(),
+		handler: function(e){
+			e.preventDefault();
+			if ( confirm("Are you sure you want to delete this entry?") ){
+				var hId = $(this).data('history-id');
+				$("#" + hId).remove();
+				$('#history-list').listview('refresh');
+				FiREST.DB.remove('history', hId);
+			}
+		}
+	}, 
+	showHistoryEvent: {
+		type: "showHistoryEvent",
+		message: "Showing History",
+		time: new Date(),
+		handler: function(e){
+			e.preventDefault();
+			var hId = $(this).data('history-id');
+			FiREST.DB.get('history', hId, function(event){
+				console.log(event);
+				$.mobile.navigate(FiREST.Templates.templates.entry.target);
+	        	FiREST.Templates.renderHistoryEntryPage(event.target.result);
+			});
+		}
+	}
 };
 
 FiREST.registerEvents = function(){
