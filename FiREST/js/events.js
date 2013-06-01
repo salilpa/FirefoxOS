@@ -144,6 +144,42 @@ FiREST.Events = {
 	        	FiREST.Templates.renderHistoryEntryPage(event.target.result);
 			});
 		}
+	},
+	clearHistoryEvent: {
+		type: "showHistoryEvent",
+		message: "Showing History",
+		time: new Date(),
+		handler: function(e){
+			e.preventDefault();
+			
+			if ( !confirm("Are you sure you want to clear the history?") ){
+				return;
+			}
+			
+			var hId = $(this).data('history-id');
+			
+			var history = [];
+			FiREST.DB.getAll('history', function(event){
+				var cursor = event.target.result;
+				if (cursor) {
+					history.push(cursor.value);
+					cursor.continue();
+				}else{
+					FiREST.DB.remove('history', history.map(
+						function(el){
+							return el.uuid;
+						})
+					);
+					$.mobile.navigate(FiREST.Templates.templates.history.target);
+				}
+			});
+			
+			FiREST.DB.get('history', hId, function(event){
+				console.log(event);
+				$.mobile.navigate(FiREST.Templates.templates.entry.target);
+	        	FiREST.Templates.renderHistoryEntryPage(event.target.result);
+			});
+		}
 	}
 };
 

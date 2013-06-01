@@ -96,6 +96,7 @@ FiREST.Templates.renderHistoryPage = function(history){
 	
 	$('.show-history-button').click(FiREST.Events.showHistoryEvent);
 	$('.delete-history-button').click(FiREST.Events.deleteHistoryEvent);
+	$('.clear-history-button').click(FiREST.Events.clearHistoryEvent);
 };
 
 FiREST.Templates.renderResponsePage = function(response){
