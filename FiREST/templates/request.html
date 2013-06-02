@@ -28,8 +28,16 @@
     </li>
   </ul>
   
-  <button id="add-header-button" data-role="button">Add Header</button>
+  <select id="add-header-button">
+    <option value="">Add Header</option>
+    <option value="custom">Add Custom Header</option>
+    <optgroup label="Built-in Headers">
+      {{{ builtInHeaders }}}
+    </optgroup>
+  </select>
+  
   <a href="#" data-role="button">Save Request</a>
+  
   <select id="select-saved-request">
     <option value="">Load Request</option>
   </select>

@@ -78,7 +78,7 @@ FiREST.Templates.renderRequestPage = function(){
 	$(template.target).trigger('pagecreate');
 	
 	$('.request-header').click(FiREST.Events.deleteHeaderEvent);
-	$('#add-header-button').click(FiREST.Events.addHeaderEvent);
+	$('#add-header-button').change(FiREST.Events.addHeaderEvent);
 	$('#select-http-method').change(FiREST.Events.selectMethodEvent);
 	$('#send-button').click(function(e){
 		$.event.trigger(FiREST.Events.sendRequestEvent);

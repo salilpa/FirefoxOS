@@ -83,3 +83,24 @@ FiREST.Helper.historyStatus = function(history){
 	}
 	return new Handlebars.SafeString(res);
 }
+
+FiREST.Helper.builtInHeaders = {
+	headers: {
+		acceptJson: 'Accept: application/json',
+		acceptXml: 'Accept: application/xml',
+		acceptText: 'Accept: text/plain',
+		contentJson: 'Content-Type: application/json',
+		contentXml: 'Content-Type: application/xml',
+		contentForm: 'Content-Type: application/x-www-form-urlencoded',
+		acceptCharsetUTF8: 'Accept-Charset: utf-8',
+		acceptCharsetISO: 'Accept-Charset: iso-8859-1',
+		noCache: 'Cache-Control: no-cache',
+	},
+	helper: function(){
+		var res = "";
+		$.each(FiREST.Helper.builtInHeaders.headers, function(k, v){
+			res += '<option value="' + v + '">' + v + '</option>';
+		});
+		return new Handlebars.SafeString(res);
+	}
+};

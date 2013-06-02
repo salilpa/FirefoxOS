@@ -42,14 +42,26 @@ FiREST.Events = {
 		message: "Adding header",
 		time: new Date(),
 		handler: function(e){
-			var sign = prompt("Add a new HTTP Header");
+			var option = $(this).val();
+			var sign = null;
+			if( option.length > 0 ){
+				if (option === 'custom'){
+					sign = prompt("Add a new HTTP Header");
+				}else{
+					var sign = option;
+				}
+				
+			}
+			
 			if(sign != null && sign.length > 0){
 				var uuid = FiREST.UUID();
+				var elId = 'remove-' + uuid;
 				var html = '<li id="' + uuid + '">';
-				html += '<a href="#" class="request-header" data-li-id="' + uuid + '">';
+				html += '<a href="#" id="' + elId + '" data-li-id="' + uuid + '">';
 				html += sign;
 				html += '</a></li>';
 				$('#headers-list').append(html).listview('refresh');
+				$('#' + elId).click(FiREST.Events.deleteHeaderEvent);
 			}
 		}
 	},

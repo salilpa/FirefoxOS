@@ -5,6 +5,7 @@
 	Handlebars.registerHelper('footer', FiREST.Helper.footer);
 	Handlebars.registerHelper('headers', FiREST.Helper.HTTPheaders);
 	Handlebars.registerHelper('historyStatus', FiREST.Helper.historyStatus);
+	Handlebars.registerHelper('builtInHeaders', FiREST.Helper.builtInHeaders.helper);
 	
 	console.log("Helpers registered");
 	
