@@ -73,6 +73,7 @@ FiREST.Events = {
 		handler: function(e){
 			var method = $('#select-http-method').val();
 			var url = $('#request-url').val();
+			var content = $('#request-content').val();
 			
 			var history = {
 				uuid: FiREST.UUID(),
@@ -80,6 +81,7 @@ FiREST.Events = {
 				method: method,
 				url: url,
 				headers: {},
+				content: content.length > 0 ? content : null,
 				response: null
 			};
 			
@@ -97,7 +99,7 @@ FiREST.Events = {
         			response:{
             			status: xhr.status,
             			headers: xhr.getHeaders(),
-            			body: xhr.response
+            			body: xhr.response,
         			}
             	};
             	history.response = result.response;
@@ -114,7 +116,8 @@ FiREST.Events = {
             xhr.onerror = function () {
                 alert("Failed");
             };
-            xhr.send();
+            
+            xhr.send(content);
 		}
 	}, 
 	deleteHistoryEvent: {
@@ -179,6 +182,19 @@ FiREST.Events = {
 				$.mobile.navigate(FiREST.Templates.templates.entry.target);
 	        	FiREST.Templates.renderHistoryEntryPage(event.target.result);
 			});
+		}
+	},
+	selectMethodEvent: {
+		type: "selectMethodEvent",
+		message: "Selected HTTP Method event",
+		time: new Date(),
+		handler: function(e){
+			var method = $(this).val();
+			if (method === 'POST' || method === 'PUT'){
+				$('#request-content-container').show();
+			}else{
+				$('#request-content-container').hide();
+			}
 		}
 	}
 };

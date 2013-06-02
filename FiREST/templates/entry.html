@@ -9,21 +9,37 @@
 </div>
 
 <div data-role="content">
-  <div class="response-metadata">
+  <div class="request-metadata">
     <ul data-role="listview">
-      <li data-role="list-divider">Request</li>
+      <li data-role="list-divider">Request {{{ historyStatus this }}}</li>
       <li>Method: {{method}}</li>
       <li>URL: {{url}}</li>
       <li>Date: {{datetime}}</li>
-      <li data-role="list-divider">Request Headers</li>
+      <li data-role="list-divider" data-theme="c">Headers</li>
       {{{ headers headers }}}
-      <li data-role="list-divider">Response {{ response.status }}</li>
-      <li data-role="list-divider">Response Headers</li>
-      {{{ headers response.headers }}}
-      <li data-role="list-divider">Response Body</li>
+      {{#if content}}
+        <li data-role="list-divider" data-theme="c">Content</li>
+      {{/if}}
     </ul>
   </div>
-  <div class="response-body">
-    {{response.body}}
-  </div>
+  {{#if content}}
+    <div class="response-body">
+      {{content}}
+    </div>
+  {{/if}}
+  {{#if response.status }}
+    <hr>
+    <div class="request-metadata" style="margin-top:20px;">
+      <ul data-role="listview">
+        <li data-role="list-divider">Response</li>
+        <li>Code: {{response.status}}</li>
+        <li data-role="list-divider" data-theme="c">Headers</li>
+        {{{ headers response.headers }}}
+        <li data-role="list-divider" data-theme="c">Response</li>
+      </ul>
+    </div>
+    <div class="response-body">
+      {{response.body}}
+    </div>
+  {{/if}}
 </div>
