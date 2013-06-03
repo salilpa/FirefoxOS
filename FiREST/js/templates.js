@@ -214,9 +214,9 @@ FiREST.Templates.Response = function(result){
 	});
 	
 	html += '<li data-role="list-divider">Response</li>';
-	html += '</ul></div><div class="response-body">';
+	html += '</ul></div><div class="response-body"><pre>';
 	html += result.response.body;
-	html += '</div></div>';
+	html += '</pre></div></div>';
 	return html;
 };
 
