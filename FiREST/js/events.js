@@ -114,9 +114,10 @@ FiREST.Events = {
 			var xhr = new XMLHttpRequest({mozSystem: true});
 			xhr.open(method, url, true);
 			
-			$(e.request.headers).each(function(k,v){
+			for(var k in e.request.headers){
+				var v = e.request.headers[k];
 				xhr.setRequestHeader(k, v);
-			});
+			}
 			
             xhr.onreadystatechange = function () {
             	$.mobile.loading( 'hide' );
