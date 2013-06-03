@@ -2,234 +2,316 @@ FiREST.Templates = {};
 
 FiREST.Templates.templates = {
     request: {
-    	template: 'request',
+    	source: 'templates/request.html',
     	target: '#request',
+    	events: [{
+    		target: '#send-request-button',
+    		event: 'click',
+    		handler: function(e){
+    			var event = FiREST.Events.sendRequestEvent
+    			event.request = {
+    				method: $('#request-http-method').val(),
+    				url: $('#request-url').val(),
+    				content: $('#request-content').val(),
+    				headers: {},
+    			};
+    			
+    			$('.request-header').each(function(){
+    				var header = $(this).html().trim().split(':');
+    				event.request.headers[header[0]] = header[1];
+    			});
+    			
+    			$.event.trigger(event);
+    		}
+    	},{
+    		target: '#request-http-method',
+    		event: 'change',
+    		handler: FiREST.Events.selectMethodEvent,
+    	},{
+    		target: '#add-header-button',
+    		event: 'change',
+    		handler: FiREST.Events.addHeaderEvent,
+    	},{
+    		target: '#clear-session-button',
+    		event: 'click',
+    		handler: function(e){
+    			document.cookie = '';
+    			alert("Session cleared");
+    		}
+    	}]
     },
     requests: {
-    	template: 'requests',
+    	source: 'templates/requests.html',
     	target: '#requests',
+    	events: [{
+    		target: '#requests',
+    		event: 'pageshow',
+    		handler: FiREST.Events.renderRequestsPageEvent,
+    	}]
     },
     history: {
-    	template: 'history',
+    	source: 'templates/history.html',
     	target: '#history',
+    	events: [{
+    		target: '#history',
+    		event: 'pageshow',
+    		handler: FiREST.Events.renderHistoryPageEvent,
+    	},{
+    		target: '#clear-history-button',
+    		event: 'click',
+    		handler: FiREST.Events.clearHistoryEvent,
+    	}]
     },
     about: {
-    	template: 'about',
+    	source: 'templates/about.html',
     	target: '#about',
-    },
-    response: {
-    	template: 'response',
-    	target: '#response',
-    },
-    entry: {
-    	template: 'entry',
-    	target: '#entry',
-    },
-    detail: {
-    	template: 'detail',
-    	target: '#entry',
+    	events: [{
+    		target: '.link-button',
+    		event: 'click',
+    		handler: FiREST.Events.openLinkEvent.handler
+    	}]
     },
 };
 
-FiREST.Templates.renderTemplate = function(tmpl_name, tmpl_data) {
-	if ( !FiREST.Templates.renderTemplate.tmpl_cache ) { 
-    	FiREST.Templates.renderTemplate.tmpl_cache = {};
-    }
-	
-	if ( !FiREST.Global.caching ){
-		FiREST.Templates.renderTemplate.tmpl_cache = {};
-	}
-
-    if ( !FiREST.Templates.renderTemplate.tmpl_cache[tmpl_name] ) {
-    	var tmpl_dir = 'templates';
-        var tmpl_url = tmpl_dir + '/' + tmpl_name + '.html';
-        var template = FiREST.Templates.ajaxTemplate(tmpl_url);
-        template = Handlebars.compile(template, tmpl_data);
-    	FiREST.Templates.renderTemplate.tmpl_cache[tmpl_name] = template;
-    }
-
-    return FiREST.Templates.renderTemplate.tmpl_cache[tmpl_name](tmpl_data);
-};
-
-FiREST.Templates.ajaxTemplate = function(tmpl_url){
-	var tmpl_string;
-    $.ajax({
-        url: tmpl_url,
-        method: 'GET',
-        dataType: 'html',
-        async: false,
-        success: function(data) {
-            tmpl_string = data;
-        }
-    });
-    return tmpl_string;
-};
-
-FiREST.Templates.renderPage = function(page){
-	switch(page){
-		case '#request':
-			$.event.trigger(FiREST.Events.renderRequestPageEvent);
-			break;
-		case '#requests':
-			$.event.trigger(FiREST.Events.renderRequestsPageEvent);
-			break;
-		case '#history':
-			$.event.trigger(FiREST.Events.renderHistoryPageEvent);
-			break;
-		case '#about':
-			$.event.trigger(FiREST.Events.renderAboutPageEvent);
-			break;
-	}
-};
-
-FiREST.Templates.renderRequestPage = function(){
-	var template = this.templates.request;
-	$(template.target).html(
-		this.renderTemplate(
-			template.template, {}
-		)
-	);
-	try {
-		$(template.target).trigger('pagecreate');
-	} catch (e) {
-		console.log(e);
-	}
-	
-	$('#add-header-button').change(FiREST.Events.addHeaderEvent);
-	$('#request-http-method').change(FiREST.Events.selectMethodEvent);
-	$('#send-button').click(function(e){
-		var event = FiREST.Events.sendRequestEvent
-		event.request = {
-			method: $('#request-http-method').val(),
-			url: $('#request-url').val(),
-			content: $('#request-content').val(),
-			headers: {},
-		};
-		
-		$('.request-header').each(function(){
-			var header = $(this).html().trim().split(':');
-			event.request.headers[header[0]] = header[1];
+FiREST.Templates.renderPages = function(refresh){
+	$.each(FiREST.Templates.templates, function(name, template){
+		$(template.target).load(template.source, function(r,s,x){
+			$(template.target).append(FiREST.Templates.Footer(template.target))
+			if (refresh){
+				try {
+					$(template.target).trigger('pagecreate');
+				} catch (e) {
+					console.log(e);
+				}
+			}
+			
+			$.each(template.events, function(i, event){
+				$(event.target).on(event.event, event.handler);
+			})
 		});
-		
-		$.event.trigger(event);
-	});
-	$('#clear-session-button').click(function(e){
-		console.log(document.cookie);
-		document.cookie = '';
-		alert("Session cleared");
 	});
 };
 
-FiREST.Templates.renderRequestsPage = function(requests){
-	var template = this.templates.requests;
-	$(template.target).html(
-		this.renderTemplate(
-			template.template, {requests: requests}
-		)
-	);
+// Rendering Methods
+
+FiREST.Templates.renderHistory = function(history){
+	$('#history-list').empty();
+	$('.show-history-button').off();
+	for ( var i = 0; i < history.length; i++) {
+		$('#history-list').append(FiREST.Templates.historyListItem(history[i]));
+	}
+	$('#history-list').listview('refresh');
+	$('.show-history-button').click(FiREST.Events.showHistoryEvent);
+};
+
+FiREST.Templates.renderRequests = function(requests){
+	$('#requests-list').empty();
+	$('.show-request-button').off();
+	for ( var i = 0; i < requests.length; i++) {
+		$('#requests-list').append(FiREST.Templates.requestListItem(requests[i]));
+	}
+	$('#requests-list').listview('refresh');
+	$('.show-request-button').click(FiREST.Events.showRequestEvent);
+};
+
+FiREST.Templates.renderSavedRequest = function(request){
+	$('#temporary').empty();
+	$('#temporary').html(FiREST.Templates.SavedRequest(request))
 	try {
-		$(template.target).trigger('pagecreate');
+		$('#temporary').trigger('pagecreate');
 	} catch (e) {
 		console.log(e);
+	}finally{
+		$('#resend-request-button').click(function(e){
+			var event = FiREST.Events.sendRequestEvent
+			event.request = request;
+			$.event.trigger(event);
+		});
+		$('#delete-request-button').click(FiREST.Events.deleteRequestEvent);
 	}
-	$('.show-request-button').click(FiREST.Events.showRequestEvent)
+	
+	$.mobile.navigate('#temporary');
+};
+
+FiREST.Templates.renderResponsePage = function(result){
+	$('#temporary').empty();
+	$('#temporary').html(FiREST.Templates.Response(result))
+	try {
+		$('#temporary').trigger('pagecreate');
+	} catch (e) {
+		console.log(e);
+	}finally{
+		$('#save-request-button').click(FiREST.Events.saveRequestEvent);
+	}
+	$.mobile.navigate('#temporary');
+};
+
+FiREST.Templates.renderSingleHistory = function(h){
+	$('#temporary').empty();
+	$('#temporary').html(FiREST.Templates.HistoryEntry(h))
+	try {
+		$('#temporary').trigger('pagecreate');
+	} catch (e) {
+		console.log(e);
+	}finally{
+		$('#delete-history-button').click(FiREST.Events.deleteHistoryEvent);
+	}
+	
+	$.mobile.navigate('#temporary');
+};
+
+// Templates as JS functions
+
+FiREST.Templates.Footer = function(active){
+	var buttons = [
+        {title:'Request', icon:'icon-rocket', url: '#request'},
+   		{title:'Saved', icon:'icon-download-alt', url: '#requests'},
+   		{title:'History', icon:'icon-tasks', url: '#history'},
+    	{title:'About', icon:'icon-star', url: '#about'},
+    ];
+	var html = '<div data-role="footer" data-position="fixed"><div data-role="navbar"><ul>';
+	
+	$.each(buttons, function(){
+		if(active === this.url){
+			html += '<li><a href="';
+			html += this.url;
+			html += '" data-icon="';
+			html += this.icon;
+			html += '" data-iconpos="top" class="ui-btn-active ui-state-persist">';
+			html += this.title;
+			html += '</a></li>';
+		}else{
+			html += '<li><a href="';
+			html += this.url;
+			html += '" data-icon="';
+			html += this.icon;
+			html += '" data-iconpos="top">';
+			html += this.title;
+			html += '</a></li>';
+		}
+	});
+	html += '</ul></div></div>';
+	return html;
+};
+
+FiREST.Templates.Response = function(result){
+	var html = '<div data-role="header">';
+	html += '<div class="left-header-button"><a href="#" data-rel="back">';
+	html += '<i class="ui-icon-icon-chevron-left"></i></a></div>'
+	html += '<h1>FiREST Response</h1>';
+	html += '<div class="right-header-button"><a href="#" data-history-id="';
+	html += result.uuid;
+	html += '" id="save-request-button">Save</a></div></div>';
+	html += '<div data-role="content">';
+	html += '<div class="response-metadata">';
+	html += '<ul data-role="listview">';
+	html += '<li data-role="list-divider">Status</li>';
+	html += '<li>' + result.response.status + '</li>';
+	html += '<li data-role="list-divider">Headers</li>';
+	
+	$.each(result.response.headers, function(k,v){
+		html += '<li>' + k + ': ' + v + '</li>';
+	});
+	
+	html += '<li data-role="list-divider">Response</li>';
+	html += '</ul></div><div class="response-body">';
+	html += result.response.body;
+	html += '</div></div>';
+	return html;
+};
+
+FiREST.Templates.historyListItem = function(history){
+	var html = '<li id="' + history.uuid + '">';
+	html += '<a href="#" class="show-history-button" data-history-id="' + history.uuid + '">';
+	html += '<p>' + history.method + ' ' + history.datetime + '</p>';
+	html += '<p>' + history.url + '</p>';
+	html += '</a></li>';
+	return html;
 }
 
-FiREST.Templates.renderHistoryPage = function(history){
-	var template = this.templates.history;
-	$(template.target).html(
-		this.renderTemplate(
-			template.template, {history:history}
-		)
-	);
-	try {
-		$(template.target).trigger('pagecreate');
-	} catch (e) {
-		console.log(e);
-	}
-	
-	$('.show-history-button').click(FiREST.Events.showHistoryEvent);
-	$('.delete-history-button').click(FiREST.Events.deleteHistoryEvent);
-	$('.clear-history-button').click(FiREST.Events.clearHistoryEvent);
-};
+FiREST.Templates.requestListItem = function(request){
+	var html = '<li id="' + request.uuid + '">';
+	html += '<a href="#" class="show-request-button" data-request-id="' + request.uuid + '">';
+	html += request.method + ' ' + request.url;
+	html += '</a></li>';
+	return html;
+}
 
-FiREST.Templates.renderAboutPage = function(){
-	var template = this.templates.about;
-	$(template.target).html(this.renderTemplate(template.template),{});
-	try {
-		$(template.target).trigger('pagecreate');
-	} catch (e) {
-		console.log(e);
-	}
-	$('.link-button').click(function(e){
-		e.preventDefault();
-		var url = $(this).attr('href');
-		var activity = new MozActivity({
-			name: "view",
-			data: {
-				type: "url",
-				url: url
-			}
+FiREST.Templates.SavedRequest = function(request){
+	var html = '<div data-role="header"><div class="left-header-button">';
+	html += '<a href="#" data-rel="back"><i class="ui-icon-icon-chevron-left"></i>';
+	html += '</a></div><h1>FiREST Request</h1><div class="right-header-button">';
+	html += '<a href="#" data-history-id="' + request.uuid + '" id="resend-request-button">Send</a>';
+	html += '</div></div><div data-role="content"><div class="request-metadata">';
+	html += '<ul data-role="listview"><li data-role="list-divider">';
+	html += request.method;
+	html += ' Request</li>';
+	html += '<li>' + request.url + '</li>';
+	
+	if(!$.isEmptyObject(request.headers)){
+		html += '<li data-role="list-divider" data-theme="c">Headers</li>';
+		$.each(request.headers, function(k,v){
+			html += '<li>' + k + ': ' + v + '</li>';
 		});
- 
-		activity.onsuccess = function() {
-		  console.log("Page visited");
-		};
-		 
-		activity.onerror = function() {
-		  console.log(this.error);
-		};
-	});
-};
-
-FiREST.Templates.renderResponsePage = function(response){
-	var template = this.templates.response;
-	$(template.target).html(
-		this.renderTemplate(
-			template.template, response
-		)
-	);
-	try {
-		$(template.target).trigger('pagecreate');
-	} catch (e) {
-		console.log(e);
 	}
 	
-	$('#save-request-button').click(FiREST.Events.saveRequestEvent);
+	html += '</ul></div><div class="response-body"><p>';
+	html += request.content;
+	html += '</p></div>';
+	html += '<a data-role="button" href="#" id="delete-request-button" ';
+	html += 'data-request-id="' + request.uuid + '">Delete</a>';
+	html += '</div>';
+	return html;
 };
 
-FiREST.Templates.renderHistoryEntryPage = function(entry){
-	var template = this.templates.entry;
-	$(template.target).html(
-		this.renderTemplate(
-			template.template, entry
-		)
-	);
-	try {
-		$(template.target).trigger('pagecreate');
-	} catch (e) {
-		console.log(e);
+FiREST.Templates.HistoryEntry = function(h){
+	var html = '<div data-role="header"><div class="left-header-button">';
+	html += '<a href="#" data-rel="back"><i class="ui-icon-icon-chevron-left"></i>';
+	html += '</a></div><h1>FiREST History</h1><div class="right-header-button">';
+	html += '<a href="#" data-history-id="';
+	html += h.uuid;
+	html += '" id="delete-history-button">Delete</a>';
+	html += '</div></div><div data-role="content"><div class="request-metadata">';
+	html += '<ul data-role="listview"><li data-role="list-divider">';
+	html += h.method;
+	html += ' Request ';
+	
+	if (h.response.status === 0){
+		html += '<i class="ui-icon-icon-flag" style="color: red;"></i>';
+	}else if (h.response.status === 200){
+		html += '<i class="ui-icon-icon-ok-sign"></i>';
+	}else{
+		html += '<i class="ui-icon-icon-info-sign"></i>';
 	}
-	$('.delete-history-button').click(FiREST.Events.deleteHistoryEvent);
-};
-
-FiREST.Templates.renderRequestDetailPage = function(request){
-	var template = this.templates.detail;
-	$(template.target).html(
-		this.renderTemplate(
-			template.template, request
-		)
-	);
-	try {
-		$(template.target).trigger('pagecreate');
-	} catch (e) {
-		console.log(e);
+	
+	html += '<li>' + h.url + '</li>';
+	html += '<li>' + h.datetime + '</li>';
+	
+	if(!$.isEmptyObject(h.headers)){
+		html += '<li data-role="list-divider" data-theme="c">Headers</li>';
+		$.each(h.headers, function(k,v){
+			html += '<li>' + k + ': ' + v + '</li>';
+		});
 	}
-	$('#resend-request-button').click(function(e){
-		var event = FiREST.Events.sendRequestEvent
-		event.request = request;
-		$.event.trigger(event);
+	
+	if( h.content != null && h.content.length > 0){
+		html += '<li data-role="list-divider" data-theme="c">Content</li></ul></div>';
+		html += '<div class="response-body">' + h.content + '</div>';
+	}else{
+		html += '</ul></div>';
+	}
+	
+	html += '<div class="request-metadata" style="margin-top:20px;">';
+	html += '<ul data-role="listview"><li data-role="list-divider">Response ' + h.response.status + '</li>';
+	
+	html += '<li data-role="list-divider" data-theme="c">Headers</li>';
+	$.each(h.response.headers, function(k,v){
+		html += '<li>' + k + ': ' + v + '</li>';
 	});
 	
-	$('#delete-request-button').click(FiREST.Events.deleteRequestEvent);
+	html += '<li data-role="list-divider" data-theme="c">Response</li></ul></div>';
+	html += '<div class="response-body">';
+	html += h.response.body;
+	html += '</div></div>';
+	return html;
 };

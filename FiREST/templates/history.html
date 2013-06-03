@@ -1,23 +1,11 @@
 <div data-role="header">
   <h1>FiREST History</h1>
   <div class="right-header-button">
-    <a href="#" class="clear-history-button">Clear</a>
+    <a href="#" id="clear-history-button">Clear</a>
   </div>
 </div>
 
 <div data-role="content">
   <ul id="history-list" data-role="listview" data-inset="false" data-split-icon="icon-remove" data-split-theme="a">
-    {{#each history}}
-      <li id="{{this.uuid}}">
-        <a href="#" class="show-history-button" data-history-id="{{this.uuid}}">
-          <p>{{this.method}} {{this.datetime}}</p>
-          <p>{{this.url}}</p>
-          <p class="ui-li-aside">{{{ historyStatus this }}}</p>
-        </a>
-<!--         <a href="#" data-corners="false" data-shadow="false" data-iconshadow="false" class="delete-history-button" data-history-id="{{this.uuid}}">Delete</a> -->
-      </li>
-    {{/each}}
   </ul>
 </div>
-
-{{{ footer '#history'}}}

@@ -4,14 +4,6 @@ FiREST.Events = {
 		message: "Database Loaded",
 		time: new Date()
 	},
-	renderRequestPageEvent: {
-		type: "renderRequestPageEvent",
-		message: "Rendering Request Page",
-		time: new Date(),
-		handler: function(e){
-			FiREST.Templates.renderRequestPage();
-		}
-	},
 	renderRequestsPageEvent: {
 		type: "renderRequestsPageEvent",
 		message: "Rendering Requests Page",
@@ -24,7 +16,7 @@ FiREST.Events = {
 					requests.push(cursor.value);
 					cursor.continue();
 				}else{
-					FiREST.Templates.renderRequestsPage(requests);
+					FiREST.Templates.renderRequests(requests);
 				}
 			});
 		}
@@ -41,7 +33,7 @@ FiREST.Events = {
 					history.push(cursor.value);
 					cursor.continue();
 				}else{
-					FiREST.Templates.renderHistoryPage(history);
+					FiREST.Templates.renderHistory(history);
 				}
 			});
 		}
@@ -52,14 +44,6 @@ FiREST.Events = {
 		time: new Date(),
 		handler: function(e){
 			FiREST.Templates.renderAboutPage();
-		}
-	},
-	responseReceivedEvent: {
-		type: "responseReceivedEvent",
-		message: "Response received",
-		time: new Date(),
-		handler: function(e){
-			console.log(e);
 		}
 	},
 	addHeaderEvent: {
@@ -73,9 +57,8 @@ FiREST.Events = {
 				if (option === 'custom'){
 					sign = prompt("Add a new HTTP Header");
 				}else{
-					var sign = option;
+					sign = option;
 				}
-				
 			}
 			
 			if(sign != null && sign.length > 0){
@@ -108,8 +91,12 @@ FiREST.Events = {
 		time: new Date(),
 		url: null,
 		handler: function(e){
-			console.log(e);
-			$.mobile.loading( "show", FiREST.Helper.Loader.sendRequest );
+			$.mobile.loading( "show", {
+				text:'Sending Request', 
+				textonly: true, 
+				textVisible: true
+			});
+			
 			var method = e.request.method;
 			var url = e.request.url;
 			var entryContent = e.request.content;
@@ -143,13 +130,12 @@ FiREST.Events = {
             	};
             	historyEntry.response = result.response;
             	
-                if (xhr.readyState === 4 && xhr.status !== 0) {
-                	$.mobile.navigate(FiREST.Templates.templates.response.target);
-                	FiREST.Templates.renderResponsePage(result);
+                if (xhr.readyState === 4) {
+                	if(xhr.status !== 0){
+                    	FiREST.Templates.renderResponsePage(result);
+                	}
+                	FiREST.DB.save('history', historyEntry);
                 }
-                
-                FiREST.DB.save('history', historyEntry);
-                
             };
 
             xhr.onerror = function () {
@@ -181,15 +167,13 @@ FiREST.Events = {
 			e.preventDefault();
 			var hId = $(this).data('history-id');
 			FiREST.DB.get('history', hId, function(event){
-				console.log(event);
-				$.mobile.navigate(FiREST.Templates.templates.entry.target);
-	        	FiREST.Templates.renderHistoryEntryPage(event.target.result);
+	        	FiREST.Templates.renderSingleHistory(event.target.result);
 			});
 		}
 	},
 	clearHistoryEvent: {
-		type: "showHistoryEvent",
-		message: "Showing History",
+		type: "clearHistoryEvent",
+		message: "Clearing History",
 		time: new Date(),
 		handler: function(e){
 			e.preventDefault();
@@ -198,28 +182,20 @@ FiREST.Events = {
 				return;
 			}
 			
-			var hId = $(this).data('history-id');
-			
-			var history = [];
+			var h = [];
 			FiREST.DB.getAll('history', function(event){
 				var cursor = event.target.result;
 				if (cursor) {
-					history.push(cursor.value);
+					h.push(cursor.value);
 					cursor.continue();
 				}else{
-					FiREST.DB.remove('history', history.map(
+					FiREST.DB.remove('history', h.map(
 						function(el){
 							return el.uuid;
 						})
 					);
-					$.mobile.navigate(FiREST.Templates.templates.history.target);
+					$.event.trigger(FiREST.Events.renderHistoryPageEvent);
 				}
-			});
-			
-			FiREST.DB.get('history', hId, function(event){
-				console.log(event);
-				$.mobile.navigate(FiREST.Templates.templates.entry.target);
-	        	FiREST.Templates.renderHistoryEntryPage(event.target.result);
 			});
 		}
 	},
@@ -261,11 +237,9 @@ FiREST.Events = {
 		message: "Showing Request event",
 		time: new Date(),
 		handler: function(e){
-			console.log(e);
 			var id = $(this).data('request-id');
 			FiREST.DB.get('request', id, function(event){
-				$.mobile.navigate(FiREST.Templates.templates.detail.target);
-				FiREST.Templates.renderRequestDetailPage(event.target.result);
+				FiREST.Templates.renderSavedRequest(event.target.result);
 			});
 		}
 	},
@@ -279,6 +253,30 @@ FiREST.Events = {
 				FiREST.DB.remove('request', hId);
 				$.mobile.navigate(FiREST.Templates.templates.requests.target);
 			}
+		}
+	},
+	openLinkEvent: {
+		type: "openLinkEvent",
+		message: "Going to Browser",
+		time: new Date(),
+		handler: function(e){
+			e.preventDefault();
+			var url = $(this).attr('href');
+			var activity = new MozActivity({
+				name: "view",
+				data: {
+					type: "url",
+					url: url
+				}
+			});
+	 
+			activity.onsuccess = function() {
+				console.log("Page visited");
+			};
+			 
+			activity.onerror = function() {
+				console.log(this.error);
+			};
 		}
 	},
 };

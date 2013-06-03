@@ -1,22 +1,18 @@
 (function() {
 	console.log("App Init");
 	
-	Handlebars.registerHelper('footer', FiREST.Helper.footer);
-	Handlebars.registerHelper('headers', FiREST.Helper.HTTPheaders);
-	Handlebars.registerHelper('historyStatus', FiREST.Helper.historyStatus);
-	Handlebars.registerHelper('builtInHeaders', FiREST.Helper.builtInHeaders.helper);
+//	$(document).on('pagechange', function(event, obj){
+//		var page = $.mobile.path.parseUrl(obj.absUrl).hash;
+//		if(page){
+//			console.log("Renderig page " + page);
+//			FiREST.Templates.renderPage(page);
+//		}
+//	});
 	
-	console.log("Helpers registered");
-	
-	$(document).on('pagechange', function(event, obj){
-		var page = $.mobile.path.parseUrl(obj.absUrl).hash;
-		if(page){
-			FiREST.Templates.renderPage(page);
-		}
+	$('#landing').on('pageinit', function(){
+		// Initialize DB and API
+		FiREST.DB.load();
 	});
-	
-	// Initialize DB and API
-	FiREST.DB.load();
 	
 	// timeout after 10 seconds
 	if ( $.mobile.path.parseUrl(document.URL).hash.length == 0){
@@ -25,7 +21,9 @@
 			if (tries < steps){
 				tries++;
 			}else{
+				updateProgressBar(5);
 				window.clearInterval(intervalId);
+				FiREST.Templates.renderPages(false);
 				$.mobile.navigate(FiREST.Templates.templates.request.target);
 			}
 			
@@ -34,9 +32,12 @@
 		$(document).on(FiREST.Events.databaseLoadedEvent.type, function(e){
 			updateProgressBar(5);
 			window.clearInterval(intervalId);
+			FiREST.Templates.renderPages(false);
 			$.mobile.navigate(FiREST.Templates.templates.request.target);
 		});
 		
+	}else{
+		FiREST.Templates.renderPages(true);
 	}
 	
 	FiREST.registerEvents();
