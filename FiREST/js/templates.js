@@ -205,8 +205,8 @@ FiREST.Templates.Response = function(result){
 	html += '<div data-role="content">';
 	html += '<div class="response-metadata">';
 	html += '<ul data-role="listview">';
-	html += '<li data-role="list-divider">Status</li>';
-	html += '<li>' + result.response.status + '</li>';
+	html += '<li data-role="list-divider">Status & Latency</li>';
+	html += '<li>' + result.response.status + ' after ' + result.duration + ' ms</li>';
 	html += '<li data-role="list-divider">Headers</li>';
 	
 	$.each(result.response.headers, function(k,v){
@@ -223,7 +223,7 @@ FiREST.Templates.Response = function(result){
 FiREST.Templates.historyListItem = function(history){
 	var html = '<li id="' + history.uuid + '">';
 	html += '<a href="#" class="show-history-button" data-history-id="' + history.uuid + '">';
-	html += '<p>' + history.method + ' ' + history.datetime + '</p>';
+	html += '<p>' + history.method + ' ' + history.datetime.toLocaleString() + '</p>';
 	html += '<p>' + history.url + '</p>';
 	html += '</a></li>';
 	return html;
@@ -285,7 +285,7 @@ FiREST.Templates.HistoryEntry = function(h){
 	}
 	
 	html += '<li>' + h.url + '</li>';
-	html += '<li>' + h.datetime + '</li>';
+	html += '<li>' + h.datetime.toLocaleString() + '</li>';
 	
 	if(!$.isEmptyObject(h.headers)){
 		html += '<li data-role="list-divider" data-theme="c">Headers</li>';
@@ -302,7 +302,7 @@ FiREST.Templates.HistoryEntry = function(h){
 	}
 	
 	html += '<div class="request-metadata" style="margin-top:20px;">';
-	html += '<ul data-role="listview"><li data-role="list-divider">Response ' + h.response.status + '</li>';
+	html += '<ul data-role="listview"><li data-role="list-divider">Response ' + h.response.status  + ' after ' + h.duration + ' ms</li>';
 	
 	html += '<li data-role="list-divider" data-theme="c">Headers</li>';
 	$.each(h.response.headers, function(k,v){

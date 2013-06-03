@@ -118,20 +118,23 @@ FiREST.Events = {
 				var v = e.request.headers[k];
 				xhr.setRequestHeader(k, v);
 			}
-			
+			var start = new Date().getTime();
             xhr.onreadystatechange = function () {
-            	$.mobile.loading( 'hide' );
-            	var result = {
-        			uuid: historyEntry.uuid,
-        			response:{
-            			status: xhr.status,
-            			headers: xhr.getHeaders(),
-            			body: xhr.response,
-        			}
-            	};
-            	historyEntry.response = result.response;
-            	
                 if (xhr.readyState === 4) {
+                	$.mobile.loading( 'hide' );
+                	var duration = (new Date().getTime()) - start;
+                	var result = {
+            			uuid: historyEntry.uuid,
+            			duration: duration,
+            			response:{
+                			status: xhr.status,
+                			headers: xhr.getHeaders(),
+                			body: xhr.response,
+            			}
+                	};
+                	historyEntry.response = result.response;
+                	historyEntry.duration = duration;
+                	
                 	if(xhr.status !== 0){
                     	FiREST.Templates.renderResponsePage(result);
                 	}
