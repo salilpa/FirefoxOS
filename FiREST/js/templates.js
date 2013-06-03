@@ -4,22 +4,30 @@ FiREST.Templates.templates = {
     request: {
     	template: 'request',
     	target: '#request',
-    	data: {},
+    },
+    requests: {
+    	template: 'requests',
+    	target: '#requests',
     },
     history: {
     	template: 'history',
     	target: '#history',
-    	data: {}
+    },
+    about: {
+    	template: 'about',
+    	target: '#about',
     },
     response: {
     	template: 'response',
     	target: '#response',
-    	data: {}
     },
     entry: {
     	template: 'entry',
     	target: '#entry',
-    	data: {}
+    },
+    detail: {
+    	template: 'detail',
+    	target: '#entry',
     },
 };
 
@@ -62,8 +70,14 @@ FiREST.Templates.renderPage = function(page){
 		case '#request':
 			$.event.trigger(FiREST.Events.renderRequestPageEvent);
 			break;
+		case '#requests':
+			$.event.trigger(FiREST.Events.renderRequestsPageEvent);
+			break;
 		case '#history':
 			$.event.trigger(FiREST.Events.renderHistoryPageEvent);
+			break;
+		case '#about':
+			$.event.trigger(FiREST.Events.renderAboutPageEvent);
 			break;
 	}
 };
@@ -75,15 +89,51 @@ FiREST.Templates.renderRequestPage = function(){
 			template.template, {}
 		)
 	);
-	$(template.target).trigger('pagecreate');
+	try {
+		$(template.target).trigger('pagecreate');
+	} catch (e) {
+		console.log(e);
+	}
 	
-	$('.request-header').click(FiREST.Events.deleteHeaderEvent);
 	$('#add-header-button').change(FiREST.Events.addHeaderEvent);
-	$('#select-http-method').change(FiREST.Events.selectMethodEvent);
+	$('#request-http-method').change(FiREST.Events.selectMethodEvent);
 	$('#send-button').click(function(e){
-		$.event.trigger(FiREST.Events.sendRequestEvent);
+		var event = FiREST.Events.sendRequestEvent
+		event.request = {
+			method: $('#request-http-method').val(),
+			url: $('#request-url').val(),
+			content: $('#request-content').val(),
+			headers: {},
+		};
+		
+		$('.request-header').each(function(){
+			var header = $(this).html().trim().split(':');
+			event.request.headers[header[0]] = header[1];
+		});
+		
+		$.event.trigger(event);
+	});
+	$('#clear-session-button').click(function(e){
+		console.log(document.cookie);
+		document.cookie = '';
+		alert("Session cleared");
 	});
 };
+
+FiREST.Templates.renderRequestsPage = function(requests){
+	var template = this.templates.requests;
+	$(template.target).html(
+		this.renderTemplate(
+			template.template, {requests: requests}
+		)
+	);
+	try {
+		$(template.target).trigger('pagecreate');
+	} catch (e) {
+		console.log(e);
+	}
+	$('.show-request-button').click(FiREST.Events.showRequestEvent)
+}
 
 FiREST.Templates.renderHistoryPage = function(history){
 	var template = this.templates.history;
@@ -92,11 +142,44 @@ FiREST.Templates.renderHistoryPage = function(history){
 			template.template, {history:history}
 		)
 	);
-	$(template.target).trigger('pagecreate');
+	try {
+		$(template.target).trigger('pagecreate');
+	} catch (e) {
+		console.log(e);
+	}
 	
 	$('.show-history-button').click(FiREST.Events.showHistoryEvent);
 	$('.delete-history-button').click(FiREST.Events.deleteHistoryEvent);
 	$('.clear-history-button').click(FiREST.Events.clearHistoryEvent);
+};
+
+FiREST.Templates.renderAboutPage = function(){
+	var template = this.templates.about;
+	$(template.target).html(this.renderTemplate(template.template),{});
+	try {
+		$(template.target).trigger('pagecreate');
+	} catch (e) {
+		console.log(e);
+	}
+	$('.link-button').click(function(e){
+		e.preventDefault();
+		var url = $(this).attr('href');
+		var activity = new MozActivity({
+			name: "view",
+			data: {
+				type: "url",
+				url: url
+			}
+		});
+ 
+		activity.onsuccess = function() {
+		  console.log("Page visited");
+		};
+		 
+		activity.onerror = function() {
+		  console.log(this.error);
+		};
+	});
 };
 
 FiREST.Templates.renderResponsePage = function(response){
@@ -106,7 +189,13 @@ FiREST.Templates.renderResponsePage = function(response){
 			template.template, response
 		)
 	);
-	$(template.target).trigger('pagecreate');
+	try {
+		$(template.target).trigger('pagecreate');
+	} catch (e) {
+		console.log(e);
+	}
+	
+	$('#save-request-button').click(FiREST.Events.saveRequestEvent);
 };
 
 FiREST.Templates.renderHistoryEntryPage = function(entry){
@@ -116,6 +205,31 @@ FiREST.Templates.renderHistoryEntryPage = function(entry){
 			template.template, entry
 		)
 	);
-	$(template.target).trigger('pagecreate');
+	try {
+		$(template.target).trigger('pagecreate');
+	} catch (e) {
+		console.log(e);
+	}
+	$('.delete-history-button').click(FiREST.Events.deleteHistoryEvent);
+};
+
+FiREST.Templates.renderRequestDetailPage = function(request){
+	var template = this.templates.detail;
+	$(template.target).html(
+		this.renderTemplate(
+			template.template, request
+		)
+	);
+	try {
+		$(template.target).trigger('pagecreate');
+	} catch (e) {
+		console.log(e);
+	}
+	$('#resend-request-button').click(function(e){
+		var event = FiREST.Events.sendRequestEvent
+		event.request = request;
+		$.event.trigger(event);
+	});
 	
+	$('#delete-request-button').click(FiREST.Events.deleteRequestEvent);
 };

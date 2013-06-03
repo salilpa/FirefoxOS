@@ -1,0 +1,29 @@
+<div data-role="header">
+  <div class="left-header-button">
+    <a href="#" data-rel="back">
+      <i class="ui-icon-icon-chevron-left"></i>
+    </a>
+  </div>
+  <h1>FiREST Request</h1>
+  <div class="right-header-button">
+    <a href="#" data-history-id="{{uuid}}" id="resend-request-button">Send</a>
+  </div>
+</div>
+
+<div data-role="content">
+  <div class="request-metadata">
+    <ul data-role="listview">
+      <li data-role="list-divider">Request</li>
+      <li>Method: {{method}}</li>
+      <li>URL: {{url}}</li>
+      <li data-role="list-divider" data-theme="c">Headers</li>
+      {{{ headers headers }}}
+    </ul>
+  </div>
+  <div class="response-body">
+    <p>
+      {{content}}
+    </p>
+  </div>
+  <a data-role="button" href="#" id="delete-request-button" data-request-id="{{uuid}}">Delete</a>
+</div>

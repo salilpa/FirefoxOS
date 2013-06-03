@@ -1,7 +1,6 @@
 (function() {
 	console.log("App Init");
 	
-	Handlebars.registerHelper('header', FiREST.Helper.header);
 	Handlebars.registerHelper('footer', FiREST.Helper.footer);
 	Handlebars.registerHelper('headers', FiREST.Helper.HTTPheaders);
 	Handlebars.registerHelper('historyStatus', FiREST.Helper.historyStatus);

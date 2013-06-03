@@ -40,18 +40,12 @@ FiREST.Helper.compare = function (lvalue, operator, rvalue, options) {
 
 };
 
-FiREST.Helper.header = function(title, options){
-	var hasBackButton = options.hash['hasBackButton'] === "true";
-	return FiREST.Templates.renderTemplate('header',{
-		title: title,
-		hasBackButton: hasBackButton
-	});
-};
-
 FiREST.Helper.footer = function(page){
 	var buttons = [
         {title:'Request', icon:'icon-rocket', url: '#request'},
+        {title:'Saved', icon:'icon-download-alt', url: '#requests'},
         {title:'History', icon:'icon-tasks', url: '#history'},
+        {title:'About', icon:'icon-star', url: '#about'},
     ];
 	
 	$.each(buttons, function(){
@@ -104,3 +98,12 @@ FiREST.Helper.builtInHeaders = {
 		return new Handlebars.SafeString(res);
 	}
 };
+
+FiREST.Helper.Loader = {
+	sendRequest: {
+		text:'Sending Request', 
+		textonly: true, 
+		textVisible: true, 
+		theme: 'a'
+	}
+}

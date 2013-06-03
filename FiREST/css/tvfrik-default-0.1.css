@@ -30,17 +30,17 @@
 	color: #ffffff /*{a-bar-color}*/;
 }
 .ui-bar-a a.ui-link {
-	color: #7cc4e7 /*{a-bar-link-color}*/;
-	font-weight: bold;
+	color: #fff;
+	font-weight: normal;
 }
 .ui-bar-a a.ui-link:visited {
-    color: #2489ce /*{a-bar-link-visited}*/;
+    color: #fff /*{a-bar-link-visited}*/;
 }
 .ui-bar-a a.ui-link:hover {
-	color: #2489ce /*{a-bar-link-hover}*/;
+	color: #fff /*{a-bar-link-hover}*/;
 }
 .ui-bar-a a.ui-link:active {
-	color: #2489ce /*{a-bar-link-active}*/;
+	color: #fff /*{a-bar-link-active}*/;
 }
 .ui-bar-a,
 .ui-bar-a input,

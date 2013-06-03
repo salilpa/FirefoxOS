@@ -12,6 +12,23 @@ FiREST.Events = {
 			FiREST.Templates.renderRequestPage();
 		}
 	},
+	renderRequestsPageEvent: {
+		type: "renderRequestsPageEvent",
+		message: "Rendering Requests Page",
+		time: new Date(),
+		handler: function(e){
+			var requests = [];
+			FiREST.DB.getAll('request', function(event){
+				var cursor = event.target.result;
+				if (cursor) {
+					requests.push(cursor.value);
+					cursor.continue();
+				}else{
+					FiREST.Templates.renderRequestsPage(requests);
+				}
+			});
+		}
+	},
 	renderHistoryPageEvent: {
 		type: "renderHistoryPageEvent",
 		message: "Rendering History Page",
@@ -27,6 +44,14 @@ FiREST.Events = {
 					FiREST.Templates.renderHistoryPage(history);
 				}
 			});
+		}
+	},
+	renderAboutPageEvent: {
+		type: "renderAboutPageEvent",
+		message: "Rendering About Page",
+		time: new Date(),
+		handler: function(e){
+			FiREST.Templates.renderAboutPage();
 		}
 	},
 	responseReceivedEvent: {
@@ -57,7 +82,7 @@ FiREST.Events = {
 				var uuid = FiREST.UUID();
 				var elId = 'remove-' + uuid;
 				var html = '<li id="' + uuid + '">';
-				html += '<a href="#" id="' + elId + '" data-li-id="' + uuid + '">';
+				html += '<a href="#" class="request-header" id="' + elId + '" data-li-id="' + uuid + '">';
 				html += sign;
 				html += '</a></li>';
 				$('#headers-list').append(html).listview('refresh');
@@ -83,45 +108,47 @@ FiREST.Events = {
 		time: new Date(),
 		url: null,
 		handler: function(e){
-			var method = $('#select-http-method').val();
-			var url = $('#request-url').val();
-			var content = $('#request-content').val();
+			console.log(e);
+			$.mobile.loading( "show", FiREST.Helper.Loader.sendRequest );
+			var method = e.request.method;
+			var url = e.request.url;
+			var entryContent = e.request.content;
 			
-			var history = {
+			var historyEntry = {
 				uuid: FiREST.UUID(),
 				datetime: new Date(),
 				method: method,
 				url: url,
-				headers: {},
-				content: content.length > 0 ? content : null,
+				headers: e.request.headers,
+				content: entryContent,
 				response: null
 			};
 			
 			var xhr = new XMLHttpRequest({mozSystem: true});
 			xhr.open(method, url, true);
 			
-			$('.request-header').each(function(){
-				var header = $(this).html().trim().split(':');
-				xhr.setRequestHeader(header[0], header[1]);
-				history.headers[header[0]] = header[1];
+			$(e.request.headers).each(function(k,v){
+				xhr.setRequestHeader(k, v);
 			});
 			
             xhr.onreadystatechange = function () {
+            	$.mobile.loading( 'hide' );
             	var result = {
+        			uuid: historyEntry.uuid,
         			response:{
             			status: xhr.status,
             			headers: xhr.getHeaders(),
             			body: xhr.response,
         			}
             	};
-            	history.response = result.response;
+            	historyEntry.response = result.response;
             	
                 if (xhr.readyState === 4 && xhr.status !== 0) {
                 	$.mobile.navigate(FiREST.Templates.templates.response.target);
                 	FiREST.Templates.renderResponsePage(result);
                 }
                 
-                FiREST.DB.save('history', history);
+                FiREST.DB.save('history', historyEntry);
                 
             };
 
@@ -129,7 +156,7 @@ FiREST.Events = {
                 alert("Failed");
             };
             
-            xhr.send(content);
+            xhr.send(entryContent);
 		}
 	}, 
 	deleteHistoryEvent: {
@@ -208,7 +235,52 @@ FiREST.Events = {
 				$('#request-content-container').hide();
 			}
 		}
-	}
+	},
+	saveRequestEvent: {
+		type: "saveRequestEvent",
+		message: "Saving Request event",
+		time: new Date(),
+		handler: function(e){
+			var hId = $(this).data('history-id');
+			FiREST.DB.get('history', hId, function(event){
+				var entry = event.target.result;
+				var request = {
+					content: entry.content,
+					headers: entry.headers,
+					method: entry.method,
+					url: entry.url,
+					uuid: FiREST.UUID()
+				}
+				FiREST.DB.save('request', request);
+				alert("Request Saved");
+			});
+		}
+	},
+	showRequestEvent: {
+		type: "showRequestEvent",
+		message: "Showing Request event",
+		time: new Date(),
+		handler: function(e){
+			console.log(e);
+			var id = $(this).data('request-id');
+			FiREST.DB.get('request', id, function(event){
+				$.mobile.navigate(FiREST.Templates.templates.detail.target);
+				FiREST.Templates.renderRequestDetailPage(event.target.result);
+			});
+		}
+	},
+	deleteRequestEvent: {
+		type: "deleteRequestEvent",
+		message: "Deleting Request",
+		time: new Date(),
+		handler: function(e){
+			if ( confirm("Are you sure you want to delete this saved request?") ){
+				var hId = $(this).data('request-id');
+				FiREST.DB.remove('request', hId);
+				$.mobile.navigate(FiREST.Templates.templates.requests.target);
+			}
+		}
+	},
 };
 
 FiREST.registerEvents = function(){

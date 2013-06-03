@@ -1,0 +1,17 @@
+<div data-role="header">
+  <h1>FiREST Requests</h1>
+</div>
+
+<div data-role="content">
+  <ul id="requests-list" data-role="listview" data-inset="false">
+    {{#each requests}}
+      <li id="{{this.uuid}}">
+        <a href="#" class="show-request-button" data-request-id="{{this.uuid}}">
+          {{this.method}} {{this.url}}
+        </a>
+      </li>
+    {{/each}}
+  </ul>
+</div>
+
+{{{ footer '#requests'}}}

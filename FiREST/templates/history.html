@@ -1,6 +1,8 @@
 <div data-role="header">
   <h1>FiREST History</h1>
-  <a href="#" class="clear-history-button ui-btn-right">Clear</a>
+  <div class="right-header-button">
+    <a href="#" class="clear-history-button">Clear</a>
+  </div>
 </div>
 
 <div data-role="content">
@@ -8,11 +10,11 @@
     {{#each history}}
       <li id="{{this.uuid}}">
         <a href="#" class="show-history-button" data-history-id="{{this.uuid}}">
-          <h2>{{this.method}} {{this.url}}</h2>
-          <p>{{this.datetime}}</p>
+          <p>{{this.method}} {{this.datetime}}</p>
+          <p>{{this.url}}</p>
           <p class="ui-li-aside">{{{ historyStatus this }}}</p>
         </a>
-        <a href="#" class="delete-history-button" data-history-id="{{this.uuid}}">Delete</a>
+<!--         <a href="#" data-corners="false" data-shadow="false" data-iconshadow="false" class="delete-history-button" data-history-id="{{this.uuid}}">Delete</a> -->
       </li>
     {{/each}}
   </ul>
