@@ -168,7 +168,12 @@ html,body {
     margin-top: 30px;
     font-size: 10px;
     white-space: pre-wrap;
-    overflow-x: scroll;
+    font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
+}
+
+.response-body textarea{
+    font-size: 10px;
+    white-space: pre-wrap;
     font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
 }
 /**

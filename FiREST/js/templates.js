@@ -214,9 +214,9 @@ FiREST.Templates.Response = function(result){
 	});
 	
 	html += '<li data-role="list-divider">Response</li>';
-	html += '</ul></div><div class="response-body"><pre>';
+	html += '</ul></div><div class="response-body"><textarea readonly="readonly">';
 	html += result.response.body;
-	html += '</pre></div></div>';
+	html += '</textarea></div></div>';
 	return html;
 };
 
@@ -255,9 +255,9 @@ FiREST.Templates.SavedRequest = function(request){
 		});
 	}
 	
-	html += '</ul></div><div class="response-body"><p>';
+	html += '</ul></div><div class="response-body"><textarea readonly="readonly">';
 	html += request.content;
-	html += '</p></div>';
+	html += '</textarea></div>';
 	html += '<a data-role="button" href="#" id="delete-request-button" ';
 	html += 'data-request-id="' + request.uuid + '">Delete</a>';
 	html += '</div>';
@@ -296,7 +296,7 @@ FiREST.Templates.HistoryEntry = function(h){
 	
 	if( h.content != null && h.content.length > 0){
 		html += '<li data-role="list-divider" data-theme="c">Content</li></ul></div>';
-		html += '<div class="response-body">' + h.content + '</div>';
+		html += '<div class="response-body"><textarea readonly="readonly">' + h.content + '</textarea></div>';
 	}else{
 		html += '</ul></div>';
 	}
@@ -310,8 +310,8 @@ FiREST.Templates.HistoryEntry = function(h){
 	});
 	
 	html += '<li data-role="list-divider" data-theme="c">Response</li></ul></div>';
-	html += '<div class="response-body">';
+	html += '<div class="response-body"><textarea readonly="readonly">';
 	html += h.response.body;
-	html += '</div></div>';
+	html += '</textarea></div></div>';
 	return html;
 };
