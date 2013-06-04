@@ -1,0 +1,17 @@
+{{{ header "TVFrik!" }}}
+
+<div data-role="content">
+  <ul data-role="listview" data-inset="false" data-corners="true" data-theme="a" 
+    data-filter-theme="d" data-filter="true" data-filter-placeholder="Search..." 
+    data-divider-theme="a" data-count-theme="a">
+    {{#each shows}}
+    <li data-icon="icon-chevron-right">
+      <a href="#seasons" class="show-button" data-show="{{this.apiId}}" data-transition="slide">
+        {{this.name}} <span class="ui-li-count">{{this.unwatched}}</span>
+      </a>
+    </li>
+    {{/each}}
+  </ul>
+</div>
+
+{{{ footer '#shows'}}}

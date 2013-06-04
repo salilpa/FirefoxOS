@@ -1,0 +1,29 @@
+{{{ header "TVFrik!" }}}
+
+<!-- 
+<div data-role="content" data-theme="a">
+  <form>
+     <label for="search-1" class="ui-hidden-accessible">Search:</label>
+     <input type="search" placeholder="Search for TV shows" id="search-field" data-theme="c">
+  </form>
+    
+  <div id="search-result-container" style="display:none;">
+    <form>
+      <fieldset id="search-results" data-role="controlgroup" data-theme="b">
+      </fieldset>
+      <input type="submit" value="Add Selected Shows" data-theme="b">
+    </form>
+  </div>
+  <button id="search-button" data-role="button">Search!</button>
+</div>
+-->
+
+<div data-role="content">
+  <div class="ui-listview-filter ui-bar-d">
+  <input type="search" placeholder="Search for TV shows" id="search-field" data-theme="c">
+  </div>
+  <ul id="search-results" data-role="listview" data-theme="d">
+  </ul>
+</div>
+
+{{{ footer '#search'}}}
