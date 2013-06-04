@@ -167,7 +167,34 @@ FiREST.Events = {
 				FiREST.DB.remove('history', hId);
 			}
 		}
-	}, 
+	},
+	emailHistoryEvent: {
+		type: "emailHistoryEvent",
+		message: "Emailing History",
+		time: new Date(),
+		handler: function(e){
+			e.preventDefault();
+			var hId = $(this).data('history-id');
+			FiREST.DB.get('history', hId, function(event){
+	        	var createEmail = new MozActivity({
+	                name: "new",
+	                data: {
+	                    type : "mail",
+	                    url: "mailto:",
+	                    subject: "FiREST Request",
+	                    body: event.target.result,
+	                }
+	            });
+	        	createEmail.onsuccess = function() {
+        			console.log("Email Sent");
+    			};
+        		 
+    			createEmail.onerror = function() {
+        			console.log(this.error);
+        		};
+			});
+		}
+	},
 	showHistoryEvent: {
 		type: "showHistoryEvent",
 		message: "Showing History",

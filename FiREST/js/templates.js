@@ -156,6 +156,7 @@ FiREST.Templates.renderSingleHistory = function(h){
 		console.log(e);
 	}finally{
 		$('#delete-history-button').click(FiREST.Events.deleteHistoryEvent);
+		$('#email-history-button').click(FiREST.Events.emailHistoryEvent);
 	}
 	
 	$.mobile.navigate('#temporary');
@@ -313,6 +314,9 @@ FiREST.Templates.HistoryEntry = function(h){
 	html += '<li data-role="list-divider" data-theme="c">Response</li></ul></div>';
 	html += '<div class="response-body"><textarea readonly="readonly">';
 	html += h.response.body;
-	html += '</textarea></div></div>';
+	html += '</textarea></div>';
+	html += '<a data-role="button" href="#" id="email-history-button" ';
+	html += 'data-history-id="' + h.uuid + '">Send by Email</a>';
+	html += '</div>';
 	return html;
 };
