@@ -107,7 +107,6 @@ html,body {
   position: absolute;
   top: 0;
   border-right: 1px solid #333333;
-  padding: 11px 10px 12px 10px;
 }
 
 .left-header-button i{
@@ -120,6 +119,8 @@ html,body {
     text-decoration: none;
     font-weight: normal;
     color: white;
+    display: block;
+    padding: 11px 10px 12px 10px;
 }
 
 .right-header-button {
@@ -127,7 +128,6 @@ html,body {
   top: 0;
   right: 0;
   border-left: 1px solid #333333;
-  padding: 11px 10px 12px 10px;
   color: white;
 }
 
@@ -141,6 +141,8 @@ html,body {
     text-decoration: none;
     font-weight: normal;
     color: white;
+    display: block;
+    padding: 11px 10px 12px 10px;
 }
 
 .progress-bar input[type=number], .ui-slider-handle{
