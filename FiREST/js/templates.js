@@ -90,6 +90,7 @@ FiREST.Templates.renderPages = function(refresh){
 			})
 		});
 	});
+	$.event.trigger(FiREST.Events.pagesRenderedEvent);
 };
 
 // Rendering Methods

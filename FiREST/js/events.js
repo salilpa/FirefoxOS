@@ -4,6 +4,11 @@ FiREST.Events = {
 		message: "Database Loaded",
 		time: new Date()
 	},
+	pagesRenderedEvent: {
+		type: "pagesRenderedEvent",
+		message: "Pages rendered",
+		time: new Date()
+	},
 	renderRequestsPageEvent: {
 		type: "renderRequestsPageEvent",
 		message: "Rendering Requests Page",

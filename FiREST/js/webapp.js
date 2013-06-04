@@ -1,14 +1,6 @@
 (function() {
 	console.log("App Init");
 	
-//	$(document).on('pagechange', function(event, obj){
-//		var page = $.mobile.path.parseUrl(obj.absUrl).hash;
-//		if(page){
-//			console.log("Renderig page " + page);
-//			FiREST.Templates.renderPage(page);
-//		}
-//	});
-	
 	$('#landing').on('pageinit', function(){
 		// Initialize DB and API
 		FiREST.DB.load();
@@ -30,9 +22,15 @@
 		}, 1000);
 		
 		$(document).on(FiREST.Events.databaseLoadedEvent.type, function(e){
+			console.log(e.message);
+			updateProgressBar(3);
+			FiREST.Templates.renderPages(false);
+		});
+		
+		$(document).on(FiREST.Events.pagesRenderedEvent.type, function(e){
+			console.log(e.message);
 			updateProgressBar(5);
 			window.clearInterval(intervalId);
-			FiREST.Templates.renderPages(false);
 			$.mobile.navigate(FiREST.Templates.templates.request.target);
 		});
 		
