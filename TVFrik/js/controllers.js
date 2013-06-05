@@ -147,12 +147,18 @@ TVFrik.Controller.Search = {
 		var action = TVFrik.API.routes.searchByName;
 		action.params.seriesname = search;
 		action.handler = this.resultHandler;
+		
+		$.mobile.loading( "show", {
+			text:'Searching "' + search + '"', 
+			textonly: true, 
+			textVisible: true
+		});
+		
 		TVFrik.API.call(action);
 	},
 	resultHandler: function(response){
-		console.log("Got response")
+		$.mobile.loading( 'hide' );
 		response = JXON.build(response);
-		console.log(response);
 		TVFrik.Templates.search.render(response.data.series);
 	},
 	addShowHandler: function(e){
@@ -161,7 +167,7 @@ TVFrik.Controller.Search = {
 		e.preventDefault();
 		if (confirm('Add "' + name + '" show to your shows?')){
 			var action = TVFrik.API.routes.serie;
-			action.params.seriesid = 71663;
+			action.params.seriesid = id;
 			action.params.all = true;
 			action.handler = function(response){
 				response = JXON.build(response);

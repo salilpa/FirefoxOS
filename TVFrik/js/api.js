@@ -166,7 +166,22 @@ TVFrik.API.routes = {
 
 TVFrik.API.call = function(route){
 	console.log("Calling " + route.getUrl());
-	$.get(route.getUrl(), route.handler);
+//	$.get(route.getUrl(), route.handler);
+	
+	var xhr = new XMLHttpRequest({mozSystem: true});
+	xhr.open("GET", route.getUrl(), true);
+	xhr.overrideMimeType("text/xml");
+	xhr.onreadystatechange = function () {
+		if (xhr.readyState === 4) {
+			if(xhr.status === 200){
+				route.handler(xhr.responseXML);
+			}else{
+				alert("Failed to call " + route.getUrl());
+			}
+		}
+	}
+	xhr.send();
+	
 };
 
 TVFrik.API.GenericHandler = function(xml){
