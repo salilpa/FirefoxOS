@@ -3,10 +3,10 @@
 TVFrik.API = {};
 
 TVFrik.API.constants = {
-//	url: 'http://thetvdb.com/api/',
-//	key: '7D1853FEBCEF99FA'
-	url: 'http://localhost/TVFrik/xml',
-	key: ''
+	url: 'http://thetvdb.com/api/',
+	key: '7D1853FEBCEF99FA'
+//	url: 'http://localhost/TVFrik/xml',
+//	key: ''
 };
 
 TVFrik.API.routes = {
@@ -21,8 +21,8 @@ TVFrik.API.routes = {
 		}
 	},
 	time: {
-//		url: TVFrik.API.constants.url + TVFrik.API.constants.key + '/Updates.php',
-		url: TVFrik.API.constants.url + TVFrik.API.constants.key + '/update.xml',
+		url: TVFrik.API.constants.url + 'Updates.php',
+//		url: TVFrik.API.constants.url + TVFrik.API.constants.key + '/update.xml',
 		handler: function(xml){ 
 			TVFrik.API.GenericHandler(xml); 
 		},
@@ -31,7 +31,6 @@ TVFrik.API.routes = {
 			time: null		//optional
 		},
 		getUrl: function(){
-			console.log(this);
 			if (this.time != null)
 				return this.url + '?type=' + this.params.type + '&time=' + this.params.time;
 			else
@@ -39,8 +38,8 @@ TVFrik.API.routes = {
 		}
 	},
 	searchByName: {
-//		url: TVFrik.API.constants.url + '/GetSeries.php',
-		url: TVFrik.API.constants.url + '/search.xml',
+		url: TVFrik.API.constants.url + 'GetSeries.php',
+//		url: TVFrik.API.constants.url + '/search.xml',
 		handler: function(xml){ 
 			TVFrik.API.GenericHandler(xml); 
 		},
@@ -54,7 +53,7 @@ TVFrik.API.routes = {
 		}
 	},
 	searchByRemoteID: {
-		url: TVFrik.API.constants.url + '/GetSeriesByRemoteID.php',
+		url: TVFrik.API.constants.url + 'GetSeriesByRemoteID.php',
 		handler: function(xml){ 
 			TVFrik.API.GenericHandler(xml); 
 		},

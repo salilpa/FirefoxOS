@@ -1,5 +1,3 @@
-{{{ header "TVFrik!" hasBackButton="true" }}}
-
 <ul data-role="listview" data-divider-theme="a" data-theme="a">
   <li data-role="list-divider">
     <h1>{{show.name}} Season: {{season}}</h1>
@@ -7,10 +5,15 @@
   {{#each episodes}}
     <li data-icon="icon-chevron-right">
       <a href="#episode" class="episode-button" data-show="{{this.show}}" data-season="{{season}}" data-episode="{{this.apiId}}" data-transition="slide">
-        {{this.name}} {{{episodeStatus this}}}
+        {{#if this.watched }}
+          <i class="ui-icon-icon-eye-open"></i>
+        {{/if}}
+        {{#if this.downloaded }}
+          <i class="ui-icon-icon-cloud-download"></i>
+        {{/if}}
+        
+        {{this.name}}
       </a>
     </li>
   {{/each}}
 </ul>
-
-{{{ footer '#shows'}}}

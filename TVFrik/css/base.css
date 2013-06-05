@@ -107,31 +107,46 @@ html,body {
     margin-top: 25px;
 }
 
-.back-button {
+.left-header-button {
   position: absolute;
   top: 0;
-  border-right: 1px solid #000;
-  padding-top: 5px;
-  padding-bottom: 8px;
+  border-right: 1px solid #333333;
 }
 
-.back-button .ui-btn{
-  margin: 0px;
-  background: none;
-  background-color: transparent;
-}
-
-.back-button .ui-btn-up-a{
-  border: none;
-}
-
-.back-button .ui-btn-inner{
-  border: none;
-  background-color: transparent;
-}
-
-.back-button i{
+.left-header-button i{
     font-style: normal;
+    color: white;
+}
+
+.left-header-button a{
+    font-style: normal;
+    text-decoration: none;
+    font-weight: normal;
+    color: white;
+    display: block;
+    padding: 11px 10px 12px 10px;
+}
+
+.right-header-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-left: 1px solid #333333;
+  color: white;
+}
+
+.right-header-button i{
+    font-style: normal;
+    color: white;
+}
+
+.right-header-button a{
+    font-style: normal;
+    text-decoration: none;
+    font-weight: normal;
+    color: white;
+    display: block;
+    padding: 11px 10px 12px 10px;
 }
 
 .subheader-a {
@@ -217,6 +232,10 @@ html,body {
 
 .ui-btn-up-a, .ui-btn-up-b, .ui-btn-up-c, .ui-btn-up-d {
 	font-weight: normal;
+}
+
+.ui-btn-hover-a, .ui-btn-hover-b, .ui-btn-hover-c, .ui-btn-hover-d {
+  font-weight: normal;
 }
 /**
 .ui-icon-searchfield:before {

@@ -2,7 +2,7 @@
 
 window.TVFrik = {};
 TVFrik.Global = {
-	caching: false
+	installed: false
 };
 
 // Install app
@@ -12,7 +12,7 @@ if (navigator.mozApps) {
 		var install = document.querySelector("#install");
 		if (checkIfInstalled.result) {
 //			install.style.display = "none";
-			TVFrik.Global.caching = true;
+			TVFrik.Global.installed = true;
 		} else {
 			var manifestURL = location.href.substring(0, location.href.lastIndexOf("/")) + "/package.manifest";
 //			var installButton = document.querySelector("#install-btn");

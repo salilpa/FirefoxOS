@@ -1,32 +1,32 @@
 (function() {
 	console.log("App Init");
 	
-	Handlebars.registerHelper('stars', TVFrik.Helper.stars);
-	Handlebars.registerHelper('episodeStatus', TVFrik.Helper.episodeStatus);
-	Handlebars.registerHelper('header', TVFrik.Helper.header);
-	Handlebars.registerHelper('footer', TVFrik.Helper.footer);
-	
-	console.log("Helpers registered");
-	
-	$(document).on('pagechange', function(event, obj){
-		var page = $.mobile.path.parseUrl(obj.absUrl).hash;
-		if(page){
-			TVFrik.Templates.renderPage(page);
+	Handlebars.registerHelper('stars', function(rating){
+		var res = "";
+		for (var i = 0; i <= 10; i++){
+			if (i < rating){
+				res += '<i class="ui-icon-icon-star"></i>';
+			}else{
+				res += '<i class="ui-icon-icon-star-empty"></i>';
+			}
 		}
+		return new Handlebars.SafeString(res);
 	});
 	
 	// Initialize DB and API
-	TVFrik.DB.load();
+	$('#landing').on('pageinit', function(){
+		TVFrik.DB.load();
+	});
 	
 	// timeout after 10 seconds
 	if ( $.mobile.path.parseUrl(document.URL).hash.length == 0){
-		var tries = 0, steps = 10;
+		var tries = 0, steps = 20;
 		var intervalId = window.setInterval(function(){
 			if (tries < steps){
 				tries++;
 			}else{
 				window.clearInterval(intervalId);
-				$.mobile.navigate(TVFrik.Templates.templates.shows.target);
+				alert("Failed to contact TheTVDB.com. Try again later.");
 			}
 			
 		}, 1000);
@@ -46,9 +46,17 @@
 		$(document).on(TVFrik.Events.apiMirrorEvent.type, function(e){
 			console.log(e.message);
 			updateProgressBar(4);
-			window.clearInterval(intervalId);
-			$.mobile.navigate(TVFrik.Templates.templates.shows.target);
+			TVFrik.Pages.renderAll(true);
 		});
+		
+		$(document).on(TVFrik.Events.pagesRenderedEvent.type, function(e){
+			console.log(e.message);
+			updateProgressBar(5);
+			window.clearInterval(intervalId);
+			$.mobile.navigate(TVFrik.Pages.shows.target);
+		});
+	}else{
+		TVFrik.Pages.renderAll(true);
 	}
 	
 	TVFrik.registerEvents();

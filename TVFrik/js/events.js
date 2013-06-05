@@ -14,6 +14,11 @@ TVFrik.Events = {
 		message: "API Updated",
 		time: new Date()
 	},
+	pagesRenderedEvent: {
+		type: "pagesRenderedEvent",
+		message: "Pages rendered",
+		time: new Date()
+	},
 	savedShowEvent: {
 		type: "savedShowEvent",
 		message: "Correctly saved show",
@@ -39,7 +44,7 @@ TVFrik.Events = {
 		message: "Rendering Shows Page",
 		time: new Date(),
 		handler: function(e){
-			TVFrik.Controller.Show.renderShowsEventHandler();
+			TVFrik.Controller.Shows.renderShows();
 		}
 	},
 	renderSeasonsEvent: {
@@ -48,17 +53,20 @@ TVFrik.Events = {
 		time: new Date(),
 		showId: null,
 		handler: function(e){
-			TVFrik.Controller.Show.renderSeasonsEventHandler(e.showId);
+			var showId = parseInt($(this).data('show'));
+			TVFrik.Controller.Seasons.renderSeasons(showId);
 		}
 	},
-	renderSeasonEvent: {
-		type: "renderSeasonEvent",
-		message: "Rendering Episode list for Season",
+	renderEpisodesEvent: {
+		type: "renderEpisodesEvent",
+		message: "Rendering Episodes list for Season",
 		time: new Date(),
 		showId: null,
 		seasonId: null,
 		handler: function(e){
-			TVFrik.Controller.Show.renderSeasonEventHandler(e.showId, e.season);
+			var showId = parseInt($(this).data('show'));
+			var season = parseInt($(this).data('season'));
+			TVFrik.Controller.Episodes.renderEpisodes(showId, season);
 		}
 	},
 	renderEpisodeEvent: {
@@ -69,38 +77,45 @@ TVFrik.Events = {
 		season: null,
 		episodeId: null,
 		handler: function(e){
-			TVFrik.Controller.Show.renderEpisodeEventHandler(e.showId, e.episodeId);
+			var showId = parseInt($(this).data('show'));
+			var episodeId = parseInt($(this).data('episode'));
+			TVFrik.Controller.Episode.renderEpisode(showId, episodeId);
 		}
 	},
-	renderStatsEvent: {
-		type: "renderStatsEvent",
-		message: "Rendering Stats Page",
+	changeEpisodeStatusEvent: {
+		type: "changeEpisodeStatusEvent",
+		message: "Changing episode status",
 		time: new Date(),
 		handler: function(e){
-			TVFrik.Templates.renderStats();
+			$(this).attr("checked", !$(this).attr("checked"));
+			var showId = parseInt($(this).data('show'));
+			var episodeId = parseInt($(this).data('episode'));
+			var _status = $(this).data('status');
+			TVFrik.Controller.Episode.changeStatus(showId, episodeId, _status);
 		}
 	},
-	renderToolsEvent: {
-		type: "renderToolsEvent",
-		message: "Rendering Tools Page",
+	markShowWatchedEvent: {
+		type: "markShowWatchedEvent",
+		message: "Changing Show to watched",
 		time: new Date(),
 		handler: function(e){
-			TVFrik.Templates.renderTools();
+			var showId = parseInt($(this).data('show'));
+			var showName = $(this).data('show-name');
+			if ( confirm("Are you sure you've seen all \"" + showName + "\" episodes?") ){
+				TVFrik.Controller.Shows.watchAll(showId);
+			}
 		}
 	},
-	changeEpisodeStateEvent: {
-		type: "changeEpisodeStateEvent",
-		message: "Changing episode state",
+	watchedShowEvent: {
+		type: "watchedShowEvent",
+		message: "Correctly watched show",
 		time: new Date(),
-		showId: null,
-		episodeId: null,
-		status: null,
 		handler: function(e){
-			TVFrik.Controller.Show.changeStatusEventHandler(
-				e.showId,
-				e.episodeId,
-				e.status
-			);
+			if (e.success){
+				alert('You\'ve watched all episodes of "' + e.entity.name + '"');
+			}else{
+				alert('Failed :(');
+			}
 		}
 	}
 };

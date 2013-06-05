@@ -20,9 +20,9 @@
 </head>
 
 <body>
-  <div data-role="page" data-theme="a" id="landing" class="page">
+  <div data-role="page" data-theme="a" id="landing">
     <div data-role="content" style="text-align: center;">
-      <h1>FrikTV! 0.1</h1>
+      <h1>TVFrik!</h1>
       <img src="images/logo128.png">
       <div class="progress-bar">
         <input type="range" id="progress-bar" value="0" min="0" max="100" data-highlight="true" data-mini="true" />
@@ -33,31 +33,34 @@
     </div>
   </div>
   
-  <div data-role="page" data-theme="a" id="shows" class="page"></div>
+  <div data-role="page" data-theme="a" id="shows"></div>
   
-  <div data-role="page" data-theme="a" id="search" class="page"></div>
+  <div data-role="page" data-theme="a" id="search"></div>
   
-  <div data-role="page" data-theme="a" id="seasons" class="page"></div>
+  <div data-role="page" data-theme="a" id="about"></div>
   
-  <div data-role="page" data-theme="a" id="episodes" class="page"></div>
+  <div data-role="page" data-theme="a" id="seasons"></div>
   
-  <div data-role="page" data-theme="a" id="episode" class="page"></div>
+  <div data-role="page" data-theme="a" id="episodes"></div>
   
-  <div data-role="page" data-theme="a" id="stats" class="page"></div>
+  <div data-role="page" data-theme="a" id="episode"></div>
   
-  <div data-role="page" data-theme="a" id="tools" class="page"></div>
-
 	<script type="text/javascript" src="js/lib/jquery-1.9.1.min.js"></script>
   <script type="text/javascript" src="js/lib/jqm/jquery.mobile-1.3.1.min.js"></script>
-  <script type="text/javascript" src="js/lib/handlebars.min.js"></script>
+  
+  <!-- When developing switch this -->
+<!--   <script type="text/javascript" src="js/lib/handlebars.min.js"></script> -->
+  <script type="text/javascript" src="js/lib/handlebars.runtime.js"></script>
+  <script type="text/javascript" src="js/handlebars.js"></script>
+
   <script type="text/javascript" src="js/jxon.js"></script>
 	<script type="text/javascript" src="js/base.js"></script>
-  <script type="text/javascript" src="js/events.js"></script>
-  <script type="text/javascript" src="js/templates.js"></script>
-  <script type="text/javascript" src="js/helpers.js"></script>
   <script type="text/javascript" src="js/api.js"></script>
   <script type="text/javascript" src="js/db.js"></script>
+  <script type="text/javascript" src="js/events.js"></script>
+  <script type="text/javascript" src="js/templates.js"></script>
   <script type="text/javascript" src="js/controllers.js"></script>
+  <script type="text/javascript" src="js/pages.js"></script>
 	<script type="text/javascript" src="js/webapp.js"></script>
 	<script type="text/javascript" src="js/offline.js"></script>
 	

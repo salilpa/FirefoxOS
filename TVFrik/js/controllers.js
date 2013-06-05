@@ -1,7 +1,10 @@
 TVFrik.Controller = {};
 
-TVFrik.Controller.Show = {
-	renderShowsEventHandler: function(){
+/**
+ * Controller for shows page
+ */
+TVFrik.Controller.Shows = {
+	renderShows: function(){
 		var shows = [];
 		TVFrik.DB.getAll('show', function(event){
 			var cursor = event.target.result;
@@ -17,11 +20,23 @@ TVFrik.Controller.Show = {
 				shows.push(show);
 				cursor.continue();
 			} else {
-				TVFrik.Templates.renderShows(shows);
+				TVFrik.Templates.shows.render(shows);
 			}
 		});
 	},
-	renderSeasonsEventHandler: function(showId){
+	watchAll: function(showId){
+		TVFrik.DB.get('show', showId, function(event){
+			var show = event.target.result;
+			for ( var i = 0; i < show.episodes.length; i++) {
+				show.episodes[i].watched = true;
+			}
+			TVFrik.DB.save('show', show, TVFrik.Events.watchedShowEvent);
+		});
+	}
+};
+
+TVFrik.Controller.Seasons = {
+	renderSeasons: function(showId){
 		TVFrik.DB.get('show', showId, function(event){
 			var show = event.target.result;
 			var seasons = [];
@@ -39,10 +54,13 @@ TVFrik.Controller.Show = {
 					seasons[ep.season].unwatched += 1;
 				}
 			}
-			TVFrik.Templates.renderSeasons(show, seasons);
+			TVFrik.Templates.seasons.render(show, seasons);
 		});
-	},
-	renderSeasonEventHandler: function(showId, season){
+	}
+}
+
+TVFrik.Controller.Episodes = {
+	renderEpisodes: function(showId, season){
 		TVFrik.DB.get('show', showId, function(event){
 			var show = event.target.result;
 			var episodes = [];
@@ -53,25 +71,25 @@ TVFrik.Controller.Show = {
 					episodes.push(episode);
 				}
 			}
-			TVFrik.Templates.renderSeason(show, season, episodes);
+			TVFrik.Templates.episodes.render(show, season, episodes);
 		});
 	},
-	renderEpisodeEventHandler: function(showId, episodeId){
+};
+
+TVFrik.Controller.Episode = {
+	renderEpisode: function(showId, episodeId){
 		TVFrik.DB.get('show', showId, function(event){
 			var show = event.target.result;
 			for ( var i = 0; i < show.episodes.length; i++) {
 				var episode = show.episodes[i];
 				if( episode.apiId === episodeId ){
 					episode.show = show.apiId;
-					TVFrik.Templates.renderEpisode(show, episode);
+					TVFrik.Templates.episode.render(show, episode);
 				}
 			}
 		});
 	},
-	renderSearchEventHandler: function(){
-		TVFrik.Templates.renderSearch();
-	},
-	changeStatusEventHandler: function(showId, episodeId, status){
+	changeStatus: function(showId, episodeId, status){
 		TVFrik.DB.get('show', showId, function(event){
 			var show = event.target.result;
 			for ( var i = 0; i < show.episodes.length; i++) {
@@ -89,10 +107,11 @@ TVFrik.Controller.Show = {
 TVFrik.Controller.Update = {
 	update: function(){
 		var action = TVFrik.API.routes.time;
-		action.handler = this.apiHandler;
+		action.handler = TVFrik.Controller.Update.apiHandler;
 		TVFrik.API.call(action);
 	},
 	apiHandler: function(response){
+		console.log("Got response");
 		response = JXON.build(response);
 		var lastUpdate = new Date(response.items.time * 1000);
 		TVFrik.DB.save('config', {
@@ -119,39 +138,28 @@ TVFrik.Controller.Mirror = {
 };
 
 TVFrik.Controller.Search = {
+	searchEventHandler: function(searchEvent){
+		searchEvent.preventDefault();
+		var search = $(this).val();
+		TVFrik.Controller.Search.search(search);
+	},
 	search: function(search){
 		var action = TVFrik.API.routes.searchByName;
 		action.params.seriesname = search;
 		action.handler = this.resultHandler;
 		TVFrik.API.call(action);
 	},
-	searchHandler: function(e){
-		e.preventDefault();
-		var search = $(this).val();
-		TVFrik.Controller.Search.search(search);
-	},
 	resultHandler: function(response){
+		console.log("Got response")
 		response = JXON.build(response);
-		var html = "";
-		$.each(response.data.series, function(){
-			html += '<li><a href="#" class="add-dialog" id="';
-			html += this.seriesid;
-			html += '">';
-			html += this.seriesname;
-			html += '</a></li>';
-		});
-		
-		$('#search-results').html(html);
-		$('#search-results').listview("refresh");
-		
-		$('.add-dialog').click(TVFrik.Controller.Search.addShowHandler);
+		console.log(response);
+		TVFrik.Templates.search.render(response.data.series);
 	},
 	addShowHandler: function(e){
 		var name = $(this).html();
 		var id = $(this).attr('id');
 		e.preventDefault();
 		if (confirm('Add "' + name + '" show to your shows?')){
-			console.log("Add show " + id);
 			var action = TVFrik.API.routes.serie;
 			action.params.seriesid = 71663;
 			action.params.all = true;
