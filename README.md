@@ -16,6 +16,14 @@ The weather data is provided by http://OpenWeatherMap.org
 
 A custom Bootstrap implementation made for FirefoxOS.
 
+### FiREST
+
+REST Client for FirefoxOS with history, saved requests, etc.
+
+### TVFrik
+
+TV show manager for FirefoxOS
+
 ## Contribute
 
 You can contribute too.
