@@ -84,17 +84,19 @@ TVFrik.Controller.Seasons = {
 	renderSeasons: function(showId){
 		TVFrik.DB.get('show', showId, function(event){
 			var show = event.target.result;
-			var seasons = [];
+			var seasons = {};
 			for ( var int = 0; int < show.seasons.length; int++) {
-				seasons.push({
+				var season = show.seasons[int];
+				seasons[season] = {
 					show: show.apiId,
-					season: show.seasons[int],
+					season: season,
 					unwatched: 0
-				});
+				};
 			}
 			
 			for (var i = 0; i < show.episodes.length; i++){
 				var ep = show.episodes[i];
+				console.log(ep);
 				if(!ep.watched){
 					seasons[ep.season].unwatched += 1;
 				}
@@ -209,7 +211,17 @@ TVFrik.Controller.Search = {
 	resultHandler: function(response){
 		$.mobile.loading( 'hide' );
 		response = JXON.build(response);
-		TVFrik.Templates.search.render(response.data.series);
+		if (response.data.series){
+			if (response.data.series.length){
+				TVFrik.Templates.search.render(response.data.series);
+			}else{
+				TVFrik.Templates.search.render([response.data.series]);
+			}
+		}else{
+			alert("No results");
+			TVFrik.Templates.search.render([]);
+		}
+		
 	},
 	addShowHandler: function(e){
 		var name = $(this).html();
