@@ -3,16 +3,17 @@
     <h1>{{show.name}} Season: {{season}}</h1>
   </li>
   {{#each episodes}}
-    <li data-icon="icon-chevron-right">
+    {{#if this.watched }}
+      <li data-icon="icon-ok">
+    {{else}}
+      {{#if this.downloaded}}
+        <li data-icon="icon-cloud-download">
+      {{else}}
+        <li data-icon="icon-chevron-right">
+      {{/if}}
+    {{/if}}
       <a href="#episode" class="episode-button" data-show="{{this.show}}" data-season="{{season}}" data-episode="{{this.apiId}}" data-transition="slide">
-        {{#if this.watched }}
-          <i class="ui-icon-icon-eye-open"></i>
-        {{/if}}
-        {{#if this.downloaded }}
-          <i class="ui-icon-icon-cloud-download"></i>
-        {{/if}}
-        
-        {{this.name}}
+        {{this.number}} {{this.name}} 
       </a>
     </li>
   {{/each}}

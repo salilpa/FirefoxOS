@@ -1,7 +1,7 @@
 TVFrik.Controller = {};
 
 /**
- * Controller for shows page
+ * Controller for shows
  */
 TVFrik.Controller.Shows = {
 	renderShows: function(){
@@ -31,6 +31,51 @@ TVFrik.Controller.Shows = {
 				show.episodes[i].watched = true;
 			}
 			TVFrik.DB.save('show', show, TVFrik.Events.watchedShowEvent);
+		});
+	},
+	remove : function(showId){
+		TVFrik.DB.remove('show', showId, function(e){
+			alert(e.success ? 'Deleted' : "Failed to Delete :(");
+			$.mobile.navigate(TVFrik.Pages.shows.target);
+		});
+	},
+	update : function(showId, name){
+		$.mobile.loading( "show", {
+			text:'Updating "' + name + '"', 
+			textonly: true, 
+			textVisible: true
+		});
+		
+		TVFrik.DB.get('show', showId, function(event){
+			var show = event.target.result;
+			var now = new Date();
+			var days = (now - show.lastupdate) / (1000*60*60*24);
+			
+			if (days > -5){ // minimum number of days before updating
+				var action = TVFrik.API.routes.serie;
+				action.params.seriesid = showId;
+				action.params.all = true;
+				action.handler = function(response){
+					response = JXON.build(response);
+					var newShow = TVFrik.DB.Show(response.data);
+					newShow.lastupdate = new Date();
+					// reset the current status to the new object
+					for ( var i = 0; i < show.episodes.length; i++) {
+						var episode = show.episodes[i];
+						for ( var j = 0; j < newShow.episodes.length; j++) {
+							if(newShow.episodes[j].apiId === episode.apiId){
+								newShow.episodes[j].watched = episode.watched;
+								newShow.episodes[j].downloaded = episode.downloaded;
+								break;
+							}
+						}
+					}
+					
+					TVFrik.DB.save('show', newShow, TVFrik.Events.updatedShowEvent);
+				};
+				TVFrik.API.call(action);
+			}
+			
 		});
 	}
 };
@@ -172,7 +217,7 @@ TVFrik.Controller.Search = {
 			action.handler = function(response){
 				response = JXON.build(response);
 				var show = TVFrik.DB.Show(response.data);
-				console.log(show);
+				show.lastupdate = new Date();
 				TVFrik.DB.save('show', show, TVFrik.Events.savedShowEvent);
 			};
 			TVFrik.API.call(action);

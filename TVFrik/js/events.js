@@ -117,6 +117,62 @@ TVFrik.Events = {
 				alert('Failed :(');
 			}
 		}
+	},
+	openLinkEvent: {
+		type: "openLinkEvent",
+		message: "Going to Browser",
+		time: new Date(),
+		handler: function(e){
+			e.preventDefault();
+			var url = $(this).attr('href');
+			var activity = new MozActivity({
+				name: "view",
+				data: {
+					type: "url",
+					url: url
+				}
+			});
+	 
+			activity.onsuccess = function() {
+				console.log("Page visited");
+			};
+			 
+			activity.onerror = function() {
+				console.log(this.error);
+			};
+		}
+	},
+	deleteShowEvent: {
+		type: "deleteShowEvent",
+		message: "Deleting Show",
+		time: new Date(),
+		handler: function(e){
+			var showId = parseInt($(this).data('show'));
+			var showName = $(this).data('show-name');
+			if ( confirm("Are you sure you want to delete \"" + showName + "\"?") ){
+				TVFrik.Controller.Shows.remove(showId);
+			}
+		}
+	},
+	updateShowEvent: {
+		type: "updateShowEvent",
+		message: "Updating Show",
+		time: new Date(),
+		handler: function(e){
+			var showId = parseInt($(this).data('show'));
+			var showName = $(this).data('show-name');
+			TVFrik.Controller.Shows.update(showId, showName);
+		}
+	},
+	updatedShowEvent: {
+		type: "updatedShowEvent",
+		message: "Updated Show",
+		time: new Date(),
+		handler: function(e){
+			$.mobile.loading("hide");
+			$.mobile.navigate(TVFrik.Pages.shows.target);
+			alert(e.success ? 'Updated' : "Failed to Update :(");
+		}
 	}
 };
 

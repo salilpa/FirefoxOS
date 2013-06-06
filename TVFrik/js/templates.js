@@ -45,6 +45,9 @@ TVFrik.Templates = {
 			$(self.page).trigger('pagecreate');
 			$('.season-button').click(TVFrik.Events.renderEpisodesEvent.handler);
 			$('#mark-as-seen-button').click(TVFrik.Events.markShowWatchedEvent.handler);
+			$('#delete-show-button').click(TVFrik.Events.deleteShowEvent.handler);
+			$('#update-show-button').click(TVFrik.Events.updateShowEvent.handler);
+			$('.link-button').click(TVFrik.Events.openLinkEvent.handler);
 		}
 	},
 	episodes: {

@@ -7,6 +7,9 @@
     <p class="serie-overview">
       {{show.overview}}
     </p>
+    
+    <button id="update-show-button" data-show="{{show.apiId}}" data-show-name="{{show.name}}" data-theme="b">Update</button>
+    
     <div data-role="controlgroup" data-mini="true">
       <button data-theme="a">Rate this Show</button>
       <a href="http://thetvdb.com/?tab=series&id={{show.tvdbId}}" class="link-button" data-role="button" data-theme="a">
@@ -15,8 +18,16 @@
       <a href="http://www.imdb.com/title/{{show.imdbId}}" class="link-button" data-role="button" data-theme="a">
         Check in IMDB
       </a>
+      <button id="mark-as-seen-button" data-show="{{show.apiId}}" data-show-name="{{show.name}}" data-theme="a">
+        Mark as seen
+      </button>
+      <button id="delete-show-button" data-show="{{show.apiId}}" data-show-name="{{show.name}}" data-theme="a">
+        Delete
+      </button>
     </div>
-    <button id="mark-as-seen-button" data-show="{{show.apiId}}" data-show-name="{{show.name}}" data-theme="b">Mark as seen</button>
+    
+    
+    
   </div>
 </li>
 {{#each seasons}}
