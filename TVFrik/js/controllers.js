@@ -186,7 +186,12 @@ TVFrik.Controller.Search = {
 	searchEventHandler: function(searchEvent){
 		searchEvent.preventDefault();
 		var search = $(this).val();
-		TVFrik.Controller.Search.search(search);
+		if(search.length > 0){
+			TVFrik.Controller.Search.search(search);
+		}else{
+			TVFrik.Templates.search.render([]);
+		}
+		
 	},
 	search: function(search){
 		var action = TVFrik.API.routes.searchByName;
