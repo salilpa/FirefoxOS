@@ -237,6 +237,12 @@ html,body {
 .ui-btn-hover-a, .ui-btn-hover-b, .ui-btn-hover-c, .ui-btn-hover-d {
   font-weight: normal;
 }
+
+.serie-overview {
+	text-align: center;
+	margin-bottom: 20px;
+	margin-top: 20px;
+}
 /**
 .ui-icon-searchfield:before {
   font-family: FontAwesome;
